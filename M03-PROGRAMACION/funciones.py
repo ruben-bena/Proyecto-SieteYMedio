@@ -1,5 +1,8 @@
 import os
+import random
+import string
 from parametros import *
+from datos import *
 
 def clearScreen() -> None:
     '''Limpiamos la pantalla de la terminal.
@@ -9,6 +12,52 @@ def clearScreen() -> None:
         os.system('cls')
     else:                   # Si estàs a Linux o macOS
         os.system('clear')
+
+def generarBaraja():
+    numeros = []
+    for n in range(1,13):
+        numeros.append(n)
+    palos = ['Bastos', 'Espadas', 'Copas', 'Oros']
+
+    for priority, palo in enumerate(palos):
+        for n in numeros:
+            clave = palo[0] + f'{n:02}'
+            cartas[clave] = {}
+
+            if n == 1:
+                tmp = 'Uno'
+            elif n == 2:
+                tmp = 'Dos'
+            elif n == 3:
+                tmp = 'Tres'
+            elif n == 4:
+                tmp = 'Cuatro'
+            elif n == 5:
+                tmp = 'Cinco'
+            elif n == 6:
+                tmp = 'Seis'
+            elif n == 7:
+                tmp = 'Siete'
+            elif n == 8:
+                tmp = 'Ocho'
+            elif n == 9:
+                tmp = 'Nueve'
+            elif n == 10:
+                tmp = 'Sota'
+            elif n == 11:
+                tmp = 'Caballo'
+            elif n == 12:
+                tmp = 'Rey'
+            cartas[clave]['literal'] = f'{tmp} de {palo}'
+
+            if n >= 8:
+                cartas[clave]['value'] = 0.5
+            else:
+                cartas[clave]['value'] = n
+
+            cartas[clave]['priority'] = priority + 1
+
+            cartas[clave]['realValue'] = n
 
 def validaInput(inputUsuario, posiblesInputs):
     if inputUsuario not in posiblesInputs:
@@ -42,9 +91,9 @@ def menuPrincipal():
             break
 
     if userInput == 1:
-        menuAddRemoveShowPlayers()
+        addRemovePlayers()
     elif userInput == 2:
-        menuSettings()
+        settings()
     elif userInput == 3: # Falta poner condiciones para que el juego pueda comenzar
         playGame()
     elif userInput == 4:
@@ -54,33 +103,8 @@ def menuPrincipal():
     elif userInput == 6:
         quit
 
-def menuAddRemoveShowPlayers():
-    validInputs = (1,2,3,4)
-    options = (
-        '1) New Human Player',
-        '2) New boot',
-        '3) Show/Remove Players',
-        '4) Go back')
-    while True:
-        clearScreen()
-        print('ADD/REMOVE/SHOW PLAYERS'.center(lineSize))
-        for option in options:
-            print(initialString + option.ljust(lineSize - lineStart))
-        userInput = input(initialString + 'Option: ')
-        if userInput.isdigit():
-            userInput = int(userInput)
-        validOption = validaInput(userInput, validInputs)
-        if validOption:
-            break
 
-    if userInput == 1:
-        makeNewPlayer()
-    elif userInput == 2:
-        makeNewPlayer(bot)
-    elif userInput == 3:
-        showRemovePlayers()
-    elif userInput == 4:
-        menuPrincipal()
+
         
 def playGame():
     '''Esta es la función principal del proyecto. Una vez establecido el número de rondas, la
@@ -179,6 +203,10 @@ Esta función debería llamarse justo después de acabar una partida.'''
 
 '''FIN FUNCIONES DE playGame()'''
 
+
+
+
+
 def getOpt(textOpts="", inputOptText="", rangeList=[], exceptions=[]):
     '''Función para la gestión de menús. Le pasamos un texto, que nos mostrará un menú,
 un rango de opciones válidas, y una lista de excepciones, y nos devuelve la opción
@@ -226,6 +254,32 @@ def addRemovePlayers():
 3)Show/Remove Players
 4)Go back
 Option:'''
+    validInputs = (1,2,3,4)
+    options = (
+        '1) New Human Player',
+        '2) New boot',
+        '3) Show/Remove Players',
+        '4) Go back')
+    while True:
+        clearScreen()
+        print('ADD/REMOVE/SHOW PLAYERS'.center(lineSize))
+        for option in options:
+            print(initialString + option.ljust(lineSize - lineStart))
+        userInput = input(initialString + 'Option: ')
+        if userInput.isdigit():
+            userInput = int(userInput)
+        validOption = validaInput(userInput, validInputs)
+        if validOption:
+            break
+
+    if userInput == 1:
+        setNewPlayer()
+    elif userInput == 2:
+        setNewPlayer(False)
+    elif userInput == 3:
+        removeBBDDPlayer()
+    elif userInput == 4:
+        menuPrincipal()
 
 def settings():
     '''Función que gestiona el menú settings, donde podemos establecer los jugadores que
@@ -238,9 +292,56 @@ en el diccionario contextGame, contextGame[“maxRounds”]'''
 
 def newRandomDNI():
     '''Función que devuelve un dni válido con números aleatorios'''
+    dni = ''
+    for i in range(8):
+        dni += str(random.randint(0,9))
+    dni += random.choice(string.ascii_letters).upper()
+    return dni
 
 def setNewPlayer(human=True):
     '''Función que gestiona la creación de un nuevo jugador que insertaremos en la BBDD'''
+    clearScreen()
+    if human:
+        print('NUEVO JUGADOR HUMANO'.center(lineSize))
+    else:
+        print('NUEVO BOT'.center(lineSize))
+
+    name = input('Name: ')
+
+    if human:
+        nif = input('NIF: ')
+    else:
+        nif = newRandomDNI()
+
+    while True:
+        print('Select your Profile:')
+        print('1)Cautios')
+        print('2)Moderated')
+        print('3)Bold')
+        userInput = input('Option: ')
+        if userInput.isdigit():
+            userInput = int(userInput)
+        else:
+            userInput = -1
+        if validaInput(userInput, [1,2,3]):
+            break
+    if userInput == 1:
+        profile = 'Cautios'
+    elif userInput == 2:
+        profile = 'Moderated'
+    elif userInput == 3:
+        profile = 'Bold'
+
+    while True:
+        userInput = input('Is ok? Y/n: ')
+        if userInput.lower() == 'y':
+            newPlayer()
+        elif userInput.lower() == 'n':
+            break
+        else:
+            print('Error, introduce un input válido.')
+
+    addRemovePlayers()
 
 def showhPlayersGame():
     '''Función que muestra los jugadores seleccionados cuando estamos añadiendo
