@@ -15,95 +15,31 @@ def clearScreen() -> None:
     else:                   # Si estàs a Linux o macOS
         os.system('clear')
 
-def setCarddeck(esp=True):
+def setCardsDeck(esp=True):
     '''Genera el contenido de la variable "cartas". Por defecto es baraja española; si el parámetro es False,
     iniciamos una baraja de poker.'''
-    if esp:
-        palos = ['Bastos', 'Espadas', 'Copas', 'Oros']
-        nCartas = 12
-    else:
-        palos = ['Tréboles', 'Picas', 'Corazones', 'Diamantes']
-        nCartas = 13
+    
 
-    numeros = []
-    for n in range(1, nCartas + 1):
-        numeros.append(n)
-
-    for priority, palo in enumerate(palos):
-        for n in numeros:
-            clave = palo[0] + f'{n:02}'
-            cartas[clave] = {}
-
-            if n == 1:
-                tmp = 'Uno'
-            elif n == 2:
-                tmp = 'Dos'
-            elif n == 3:
-                tmp = 'Tres'
-            elif n == 4:
-                tmp = 'Cuatro'
-            elif n == 5:
-                tmp = 'Cinco'
-            elif n == 6:
-                tmp = 'Seis'
-            elif n == 7:
-                tmp = 'Siete'
-            elif n == 8:
-                tmp = 'Ocho'
-            elif n == 9:
-                tmp = 'Nueve'
-            elif n == 10:
-                tmp = 'Diez'
-            elif n == 11:
-                tmp = 'Once'
-            elif n == 12:
-                tmp = 'Doce'
-            elif n == 13:
-                tmp = 'Trece'
-
-            cartas[clave]['literal'] = f'{tmp} de {palo}'
-
-            if n >= 8:
-                cartas[clave]['value'] = 0.5
-            else:
-                cartas[clave]['value'] = n
-
-            cartas[clave]['priority'] = priority + 1
-
-            cartas[clave]['realValue'] = n
-
-def invalidInput():
-    print('INVALID OPTION'.center(lineSize, '='))
-    _ = input('Press enter to continue'.center(lineSize))
-
-def menuPrincipal():
+def mainMenu():
     '''Menú principal del juego. Para que empiece la partida, debe haber mínimo 2 jugadores
     y hay que escoger una baraja de cartas (en Settings).'''
-    validInputs = (1,2,3,4,5,6)
-    options = (
+    inputOptMainMenu = (
         '1) Add/Remove/Show Players',
         '2) Settings',
         '3) Play Game',
         '4) Ranking',
         '5) Reports',
         '6) Exit')
-    while True:
-        clearScreen()
-        print('MENÚ PRINCIPAL'.center(lineSize))
-        for option in options:
-            print(initialString + option.ljust(lineSize - lineStart))
-        userInput = input(initialString + 'Option: ')
-        if userInput.isdigit():
-            userInput = int(userInput)
-            if userInput in validInputs:
-                break
-        invalidInput()
+    validInputsMainMenu = (1,2,3,4,5,6)
+    
+    userInput = getOpt(strMainMenu, inputOptMainMenu, validInputsMainMenu)
         
     if userInput == 1:
         addRemovePlayers()
     elif userInput == 2:
         settings()
-    elif userInput == 3: # Falta poner condiciones necesarias para que el juego pueda comenzar (2 jugadores min, baraja...)
+    elif userInput == 3:
+        # TODO Poner condiciones necesarias para que el juego pueda comenzar (2 jugadores min, elegir baraja...)
         playGame()
     elif userInput == 4:
         ranking()
@@ -112,10 +48,42 @@ def menuPrincipal():
     elif userInput == 6:
         quit
 
-def getOpt(textOpts="", inputOptText="", rangeList=[], exceptions=[]):
-    '''Función para la gestión de menús. Le pasamos un texto, que nos mostrará un menú,
-un rango de opciones válidas, y una lista de excepciones, y nos devuelve la opción
-elegida por el usuario'''
+def getOpt(textOpts="", inputOptText=[], rangeList=[], inputName='', errorName=''):
+    '''Función para la gestión de menús.
+
+    textOpts es un string que será el encabezado.
+    inputOptText es un array de strings, que representarán las opciones que puede escoger el usuario.
+    rangeList es un array que contiene las opciones válidas de input, ya sean números o strings.
+    inputName es el nombre del input que pedimos al usuario.
+    errorName es el mensaje de error que damos cuando el input es inválido.
+    '''
+    while True:
+
+        # Imprimimr texto en pantalla
+        clearScreen()
+        print('~' * lineSize)
+        print(textOpts.center(lineSize))
+        print('~' * lineSize)
+        for option in inputOptText:
+            print(initialString + option.ljust(lineSize - lineStart))
+        
+        # Pedir input
+        inputText = 'Option'
+        if inputName != '':
+            inputText = inputName
+        userInput = input(initialString + inputText + ': ')
+        if userInput.isdigit():
+            userInput = int(userInput)
+        if userInput in rangeList or rangeList == []:
+            break
+        else:
+            errorName = 'INVALID OPTION'
+            if errorName != '':
+                errorName = errorName
+            print('INVALID OPTION'.center(lineSize, '='))
+            _ = input('Press enter to continue'.center(lineSize))
+    
+    return userInput
 
 def orderPlayersByPoints(listaJugadores):
     '''Función que ordena los jugadores según sus puntos.'''
@@ -151,6 +119,19 @@ def newPlayer(dni, name, profile, human):
     '''Función que devuelve una tupla con dos elementos, el primero es el dni del nuevo
 jugador, el segundo, un diccionario con las claves: name, human, bank, initialCard,
 priority, type, bet, points, ards, roundPoints'''
+    # TODO Arreglar función. No sé qué valores por defecto debo darle a algunos campos.
+    player = (dni, {
+        'name':name,
+        'human': human,
+        'bank': False,
+        'initialCard': '',
+        'priority': '',
+        'type': profile,
+        'bet': '',
+        'points': 20,
+        'ards': '',
+        'roundPoints': ''})
+    return player
 
 def addRemovePlayers():
     '''Función que nos muestra el menú despues de escoger la opción 1 del menu principal:
@@ -159,23 +140,14 @@ def addRemovePlayers():
 3)Show/Remove Players
 4)Go back
 Option:'''
-    validInputs = (1,2,3,4)
-    options = (
+    inputOptAddRemovePlayers = (
         '1) New Human Player',
         '2) New boot',
         '3) Show/Remove Players',
         '4) Go back')
-    while True:
-        clearScreen()
-        print('ADD/REMOVE/SHOW PLAYERS'.center(lineSize))
-        for option in options:
-            print(initialString + option.ljust(lineSize - lineStart))
-        userInput = input(initialString + 'Option: ')
-        if userInput.isdigit():
-            userInput = int(userInput)
-            if userInput in validInputs:
-                break
-        invalidInput()
+    validInputsAddRemovePlayers = (1,2,3,4)
+    
+    userInput = getOpt(strAddRemovePlayers, inputOptAddRemovePlayers, validInputsAddRemovePlayers)
 
     if userInput == 1:
         setNewPlayer()
@@ -184,7 +156,7 @@ Option:'''
     elif userInput == 3:
         removeBBDDPlayer()
     elif userInput == 4:
-        menuPrincipal()
+        mainMenu()
 
 def settings():
     '''Función que gestiona el menú settings, donde podemos establecer los jugadores que
@@ -203,34 +175,69 @@ def newRandomDNI():
     dni += random.choice(string.ascii_letters).upper()
     return dni
 
+def validName(name):
+    '''Retorna True si un nombre de jugador es válido.
+    Un nombre es válido si sólo contiene letras y números, y no es un string vacío.'''
+    if name is '':
+        return False
+    for letter in name:
+        esLetra = letter in string.ascii_letters
+        esNumero = letter in '0123456789'
+        if not esLetra and not esNumero:
+            return False
+    return True
+
+def validDNI(dni):
+    '''Retorna True si un DNI es válido.
+    Un DNI es válido si contiene 8 números seguidos de una letra mayúscula, y no está repetido en la BBDD'''
+    if len(dni) != 9:
+        return False
+    elif not dni[:-1].isdigit():
+        return False
+    elif not dni[-1] in string.ascii_uppercase:
+        return False
+    
+    #TODO Comprobar si el DNI está en la BBDD
+    
+    return True
+
 def setNewPlayer(human=True):
     '''Función que gestiona la creación de un nuevo jugador que insertaremos en la BBDD'''
-    clearScreen()
-    if human:
-        print('NUEVO JUGADOR HUMANO'.center(lineSize))
-    else:
-        print('NUEVO BOT'.center(lineSize))
 
-    name = input('Name: ')
+    # Definir encabezado en función del tipo de jugador
+    strNewPlayer = strNewHumanPlayer
+    if not human:
+        strNewPlayer = strNewBotPlayer
 
-    if human:
-        nif = input('NIF: ')
-    else:
-        nif = newRandomDNI()
-
-    validInputs = [1,2,3]
+    # Pedir nombre
     while True:
-        print('Select your Profile:')
-        print('1)Cautios')
-        print('2)Moderated')
-        print('3)Bold')
-        userInput = input('Option: ')
-        if userInput.isdigit():
-            userInput = int(userInput)
-            if userInput in validInputs:
-                break
-        invalidInput()
+        name = getOpt(strNewPlayer, inputOptText=[], rangeList=[], inputName='Name')
+        if validName(name):
+            break
+        _ = input('Invalid name! Only characters and numbers allowed\nEnter to Continue')
 
+    # Pedir DNI
+    if human:
+        while True:
+            dni = getOpt(strNewPlayer, inputOptText=[f'name = {name}'], rangeList=[], inputName='DNI')
+            if validDNI(dni):
+                break
+            _ = input('Invalid DNI! 8 letters and 1 number required\nEnter to Continue')
+    else:
+        dni = newRandomDNI()
+
+    # Pedir perfil de riesgo
+    inputOptProfile = (
+        f'name = {name}',
+        f'DNI = {dni}',
+        '',
+        'Select your Profile:',
+        '1) Cautios',
+        '2) Moderated',
+        '3) Bold'
+    )
+    validInputsProfile = [1,2,3]
+    userInput = getOpt(strNewPlayer, inputOptProfile, validInputsProfile)
     if userInput == 1:
         profile = 'Cautios'
     elif userInput == 2:
@@ -238,18 +245,22 @@ def setNewPlayer(human=True):
     elif userInput == 3:
         profile = 'Bold'
 
-    while True:
-        userInput = input('Is ok? Y/n: ')
-        if userInput.lower() == 'y':
-            newPlayer(nif, name, profile, human)
-        elif userInput.lower() == 'n':
-            break
-        else:
-            print('Error, introduce un input válido.')
+    # Confirmar jugador
+    inputOptPlayerData = (
+        f'name = {name}',
+        f'DNI = {dni}',
+        f'Profile = {profile}'
+    )
+    userInput = getOpt(strNewPlayer, inputOptPlayerData, rangeList=['y','Y','n','N'], inputName='Is ok? Y/n')
+    if userInput.lower() == 'y':
+        #TODO Guardar al jugador en la BBDD
+        #TODO Guardar al jugador en la partida actual
+        pass
 
+    # Volver al menú anterior
     addRemovePlayers()
 
-def showhPlayersGame():
+def showPlayersGame():
     '''Función que muestra los jugadores seleccionados cuando estamos añadiendo
 jugadores a la partida. (Hay una foto en el PDF que muestra cómo debería quedar)'''
 
@@ -272,9 +283,67 @@ def getPlayers():
     '''Función que extrae los jugadores definidos en la BBDD y los almacena en el diccionario
 contextGame[“players”]'''
 
-def setCardsDeck():
+def setCardsDeck(esp=True):
     '''Elegimos una baraja, y a partir de esa baraja, establecemos el diccionario de cartas
 contextGame["cards_deck"]'''
+
+    # Definir parámetros iniciales en función de la baraja
+    if esp:
+        palos = ['Bastos', 'Espadas', 'Copas', 'Oros']
+        nCartas = 12
+    else:
+        palos = ['Tréboles', 'Picas', 'Corazones', 'Diamantes']
+        nCartas = 13
+    numeros = []
+    for n in range(1, nCartas + 1):
+        numeros.append(n)
+
+    # Generar diccionario baraja
+    deck = {}
+    for priority, palo in enumerate(palos):
+        for n in numeros:
+            clave = palo[0] + f'{n:02}'
+            deck[clave] = {}
+
+            if n == 1:
+                cardinal = 'Uno'
+            elif n == 2:
+                cardinal = 'Dos'
+            elif n == 3:
+                cardinal = 'Tres'
+            elif n == 4:
+                cardinal = 'Cuatro'
+            elif n == 5:
+                cardinal = 'Cinco'
+            elif n == 6:
+                cardinal = 'Seis'
+            elif n == 7:
+                cardinal = 'Siete'
+            elif n == 8:
+                cardinal = 'Ocho'
+            elif n == 9:
+                cardinal = 'Nueve'
+            elif n == 10:
+                cardinal = 'Diez'
+            elif n == 11:
+                cardinal = 'Once'
+            elif n == 12:
+                cardinal = 'Doce'
+            elif n == 13:
+                cardinal = 'Trece'
+
+            deck[clave]['literal'] = f'{cardinal} de {palo}'
+
+            if n >= 8:
+                deck[clave]['value'] = 0.5
+            else:
+                deck[clave]['value'] = n
+
+            deck[clave]['priority'] = priority + 1
+
+            deck[clave]['realValue'] = n
+    
+    return deck
 
 def savePlayer(nif,name,risk,human):
     '''Función que guarda en BBDD un nuevo jugador.'''

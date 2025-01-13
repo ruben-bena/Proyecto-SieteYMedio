@@ -4,7 +4,7 @@ from playGame import *
 from funciones import *
 
 def main():
-    menuPrincipal()
+    mainMenu()
 
 if __name__ == '__main__':
     main()
