@@ -75,10 +75,10 @@ def getOpt(textOpts="", inputOptText=[], rangeList=[], inputName='', errorName='
         if userInput in rangeList or rangeList == []:
             break
         else:
-            errorName = 'INVALID OPTION'
+            errorText = 'INVALID OPTION'
             if errorName != '':
-                errorName = errorName
-            print('INVALID OPTION'.center(lineSize, '='))
+                errorText = errorName
+            print(errorText.center(lineSize, '='))
             _ = input('Press enter to continue'.center(lineSize))
     
     return userInput
@@ -211,7 +211,14 @@ def selectCardsDeck():
 def setMaxRounds():
     '''Función que pide al usuario el número de rondas de la siguiente partida y lo establece
 en el diccionario contextGame, contextGame[“maxRounds”]'''
-    pass
+    validInputsSetMaxRounds = []
+    for n in range(1, 11): # Máximo de 10 rondas
+        validInputsSetMaxRounds.append(n)
+    nRounds = getOpt(strSetMaxRounds, inputOptText=[], rangeList=validInputsSetMaxRounds, inputName='Max Rounds', errorName='Please, enter only numbers between 1 and 10')
+    context_game['maxRounds'] = nRounds
+    print(initialString + f'Established maximum of rounds to {nRounds}')
+    _ = input(initialString + 'Enter to continue')
+    settings()
 
 def newRandomDNI():
     '''Función que devuelve un dni válido con números aleatorios'''
