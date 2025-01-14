@@ -335,7 +335,49 @@ def printStats(idPlayer="", titulo=""):
 def reports():
     '''Función que nos muestra el menú de reportes, y una vez elegida una opción, el reporte
 correspondiente'''
-    pass
+    inputOptReports = (
+        '1)  Initial card more repeated by each user, only users who have played a minimum of 3 games.',
+        '2)  Player who makes the highest bet per game, find the round with the highest bet.',
+        '3)  Player who makes the lowest bet per game.',                                      
+        '4)  Percentage of rounds won per player in each game (%), as well as their average bet for the game.',                                      
+        '5)  List of games won by Bots.',                                      
+        '6)  Rounds won by the bank in each game.',                                      
+        '7)  Number of users have been the bank in each game.',                                      
+        '8)  Average bet per game.',                                      
+        '9)  Average bet of the first round of each game.',                                      
+        '10) Average bet of the last round of each game.',                                      
+        '11) Go back'
+    )
+    validInputReports = []
+    for n in range(1,12):
+        validInputReports.append(n)
+
+    userInput = getOpt(strReports, inputOptReports, validInputReports)
+
+    mainMenu()
+    # TODO Todas las opciones de la función
+    if userInput == 1:
+        pass
+    elif userInput == 2:
+        pass
+    elif userInput == 3:
+        pass
+    elif userInput == 4:
+        pass
+    elif userInput == 5:
+        pass
+    elif userInput == 6:
+        pass
+    elif userInput == 7:
+        pass
+    elif userInput == 8:
+        pass
+    elif userInput == 9:
+        pass
+    elif userInput == 10:
+        pass
+    elif userInput == 11:
+        pass
 
 def getPlayers():
     '''Función que extrae los jugadores definidos en la BBDD y los almacena en el diccionario
