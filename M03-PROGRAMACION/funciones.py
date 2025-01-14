@@ -337,6 +337,7 @@ def printStats(idPlayer="", titulo=""):
 def reports():
     '''Función que nos muestra el menú de reportes, y una vez elegida una opción, el reporte
 correspondiente'''
+    # TODO Hacer que se muestre cada string segmentado si este es demasiado largo (para que quede más bonico)
     inputOptReports = (
         '1)  Initial card more repeated by each user, only users who have played a minimum of 3 games.',
         '2)  Player who makes the highest bet per game, find the round with the highest bet.',
