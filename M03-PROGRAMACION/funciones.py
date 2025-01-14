@@ -13,12 +13,7 @@ def clearScreen() -> None:
     if os.name == 'nt':     # Si estàs a Windows
         os.system('cls')
     else:                   # Si estàs a Linux o macOS
-        os.system('clear')
-
-def setCardsDeck(esp=True):
-    '''Genera el contenido de la variable "cartas". Por defecto es baraja española; si el parámetro es False,
-    iniciamos una baraja de poker.'''
-    
+        os.system('clear')    
 
 def mainMenu():
     '''Menú principal del juego. Para que empiece la partida, debe haber mínimo 2 jugadores
@@ -87,9 +82,11 @@ def getOpt(textOpts="", inputOptText=[], rangeList=[], inputName='', errorName='
 
 def orderPlayersByPoints(listaJugadores):
     '''Función que ordena los jugadores según sus puntos.'''
+    pass
 
 def chanceExceedingSevenAndHalf(id, mazo):
     '''Función que calcula la probabilidad de pasarse de siete y medio'''
+    pass
 
 def printPlayerStats(id):
     '''Esta función nos muestra los stats de un jugador humano.
@@ -103,6 +100,7 @@ bet 8
 points 20
 cards C07
 roundPoints 0'''
+    pass
 
 def logToFile(text):
     '''Esta función nos puede servir para enviar mensajes de texto al archivo
@@ -111,9 +109,11 @@ def logToFile(text):
     f = open("logfileSevenAndHalf.txt", "a")
     f.write(text)
     f.close()'''
+    pass
 
 def baknOrderNewCard(id, mazo):
     '''Función que evalúa si la banca pedirá una nueva carta.'''
+    pass
 
 def newPlayer(dni, name, profile, human):
     '''Función que devuelve una tupla con dos elementos, el primero es el dni del nuevo
@@ -162,10 +162,12 @@ def settings():
     '''Función que gestiona el menú settings, donde podemos establecer los jugadores que
 participarán en una partida, la baraja con la que se va a jugar y el número máximo de
 rondas.'''
+    pass
 
 def setMaxRounds():
     '''Función que pide al usuario el número de rondas de la siguiente partida y lo establece
 en el diccionario contextGame, contextGame[“maxRounds”]'''
+    pass
 
 def newRandomDNI():
     '''Función que devuelve un dni válido con números aleatorios'''
@@ -263,25 +265,31 @@ def setNewPlayer(human=True):
 def showPlayersGame():
     '''Función que muestra los jugadores seleccionados cuando estamos añadiendo
 jugadores a la partida. (Hay una foto en el PDF que muestra cómo debería quedar)'''
+    pass
 
 def setPlayersGame():
     '''Función para establecer los jugadores que conformarán la partida siguiente'''
+    pass
 
 def removeBBDDPlayer():
     '''Función que nos muestra los jugadores disponibles en BBDD, y elimina el que
 seleccionemos'''
+    pass
 
 def printStats(idPlayer="", titulo=""):
     '''Esta función nos imprime los stats de todos los jugadores de la partida.
     (Hay una foto en el PDF que muestra cómo debería quedar)'''
+    pass
 
 def reports():
     '''Función que nos muestra el menú de reportes, y una vez elegida una opción, el reporte
 correspondiente'''
+    pass
 
 def getPlayers():
     '''Función que extrae los jugadores definidos en la BBDD y los almacena en el diccionario
 contextGame[“players”]'''
+    pass
 
 def setCardsDeck(esp=True):
     '''Elegimos una baraja, y a partir de esa baraja, establecemos el diccionario de cartas
@@ -347,21 +355,27 @@ contextGame["cards_deck"]'''
 
 def savePlayer(nif,name,risk,human):
     '''Función que guarda en BBDD un nuevo jugador.'''
+    pass
 
 def delBBDDPlayer(nif):
     '''Función que elimina un jugador de la BBDD'''
+    pass
 
 def getGameId():
     '''Función que devuelve un id no existente en la tabla cardgame.'''
+    pass
 
 def getBBDDRanking():
     '''Función que crea la vista player_earnings, y retorna un diccionario con los datos de
 ésta,
 player_id | earnings | games_played | minutes_played.'''
+    pass
 
 def ranking():
     '''Función que muestra el menú del ranking y el ranking según la opción elegida'''
+    pass
 
 def returnListRanking(field="earnings"):
     '''Función que retorna una lista con los id de jugadores del diccionario que retorna la
 función getBBDDRanking(), ordenados según la opción del ranking elegida'''
+    pass
