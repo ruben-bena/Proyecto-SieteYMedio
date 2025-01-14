@@ -424,7 +424,24 @@ player_id | earnings | games_played | minutes_played.'''
 
 def ranking():
     '''Función que muestra el menú del ranking y el ranking según la opción elegida'''
-    pass
+    inputOptRanking = (
+        '1) Players With More Earnings',
+        '2) Players With More Games Played',
+        '3) Players With More Minutes Playerd',
+        '4) Go Back'
+    )
+    validInputRanking = (1,2,3,4)
+
+    userInput = getOpt(strRanking, inputOptRanking, validInputRanking)
+
+    if userInput == 1:
+        returnListRanking(field='earnings')
+    elif userInput == 2:
+        returnListRanking(field='games')
+    elif userInput == 3:
+        returnListRanking(field='minutes')
+    elif userInput == 4:
+        mainMenu()
 
 def returnListRanking(field="earnings"):
     '''Función que retorna una lista con los id de jugadores del diccionario que retorna la
