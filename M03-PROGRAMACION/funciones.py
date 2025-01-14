@@ -57,8 +57,11 @@ def getOpt(textOpts="", inputOptText=[], rangeList=[], inputName='', errorName='
         # Imprimimr texto en pantalla
         clearScreen()
         print('~' * lineSize)
+        print('')
         print(textOpts.center(lineSize))
+        print('')
         print('~' * lineSize)
+        print('')
         for option in inputOptText:
             print(initialString + option.ljust(lineSize - lineStart))
         
@@ -162,7 +165,48 @@ def settings():
     '''Función que gestiona el menú settings, donde podemos establecer los jugadores que
 participarán en una partida, la baraja con la que se va a jugar y el número máximo de
 rondas.'''
-    pass
+    inputOptSettings = (
+        '1) Set Game Players',
+        "2) Set Card's Deck",
+        '3) Set Max Rounds (Default 5 Rounds)',
+        '4) Go Back'
+    )
+    validInputsSettings = (1,2,3,4)
+
+    userInput = getOpt(strSettings, inputOptSettings, validInputsSettings)
+
+    if userInput == 1:
+        setPlayersGame()
+    elif userInput == 2:
+        selectCardsDeck()
+    elif userInput == 3:
+        setMaxRounds()
+    elif userInput == 4:
+        mainMenu()
+
+def selectCardsDeck():
+    '''Menú en el que se escoge qué baraja se utilizará durante la partida.'''
+    inputOptSeletCardsDeck = (
+        '1) ESP',
+        '2) POK',
+        '3) Go Back'
+    )
+    validInputSelectCardsDeck = (1,2,3)
+
+    userInput = getOpt(strSetCardsdeck, inputOptSeletCardsDeck, validInputSelectCardsDeck)
+
+    if userInput == 1:
+        esp = True
+        baraja = 'ESP, Baraja Española'
+    elif userInput == 2:
+        esp = False
+        baraja = 'POK, Baraja de Poker'
+    elif userInput == 3:
+        settings()
+    setCardsDeck(esp)
+    print(initialString + f'Established Card Deck {baraja}')
+    _ = input(initialString + 'Enter to continue'.ljust(lineSize - lineStart))
+    settings()
 
 def setMaxRounds():
     '''Función que pide al usuario el número de rondas de la siguiente partida y lo establece
@@ -351,7 +395,7 @@ contextGame["cards_deck"]'''
 
             deck[clave]['realValue'] = n
     
-    return deck
+    context_game["cards_deck"] = deck
 
 def savePlayer(nif,name,risk,human):
     '''Función que guarda en BBDD un nuevo jugador.'''
