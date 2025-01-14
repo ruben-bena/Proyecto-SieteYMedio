@@ -230,8 +230,10 @@ def newRandomDNI():
 
 def validName(name):
     '''Retorna True si un nombre de jugador es válido.
-    Un nombre es válido si sólo contiene letras y números, y no es un string vacío.'''
+    Un nombre es válido si sólo contiene letras (1 mínimo) y números, y no es un string vacío.'''
     if name is '':
+        return False
+    elif type(name) == int:
         return False
     for letter in name:
         esLetra = letter in string.ascii_letters
@@ -267,7 +269,7 @@ def setNewPlayer(human=True):
         name = getOpt(strNewPlayer, inputOptText=[], rangeList=[], inputName='Name')
         if validName(name):
             break
-        _ = input('Invalid name! Only characters and numbers allowed\nEnter to Continue')
+        _ = input('Invalid name! Only characters (1 at least) and numbers allowed\nEnter to Continue')
 
     # Pedir DNI
     if human:
