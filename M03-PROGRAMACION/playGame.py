@@ -25,6 +25,7 @@ def playGame():
     Establecer nueva banca si es necesario.
     Insertar en BBDD los diccionarios creados para tal propósito.
     Mostrar el ganador.'''
+    pass
 
 def setGamePriority(mazo):
     '''Esta función establece las prioridades de los jugadores.
@@ -64,28 +65,36 @@ prioridades.'''
 
 def resetPoints():
     '''Función que establece los 20 puntos iniciales en todos los jugadores.'''
+    for player_id in players:
+        players[player_id]['points'] = 20
 
 def fill_player_game(player_game,gameID,*fields):
     '''Función para insertar datos en el diccionario player_game'''
+    pass
 
 def fill_player_game_round(player_game_round,round,*fields):
     '''Función para insertar datos en el diccionario player_game_round'''
+    pass
 
 def checkMinimun2PlayerWithPoints():
     '''Función que verifica que al menos haya dos jugadores con puntos.'''
+    pass
 
 def orderAllPlayers():
     '''Función que ordena los jugadores de la partida (contextGame[“game”]) de forma
 que pone la banca al principio y el resto de jugadores después, ordenados según
 prioridad'''
+    pass
 
 def setBets():
     '''Función que establece las apuestas de cada jugador en función del tipo de
 jugador.'''
+    pass
 
 def standarRound(id, mazo):
     '''Función que realiza la tirada de cartas de un jugador en función del tipo de
 jugador que es y teniendo en cuenta si el jugador es banca o no.'''
+    pass
 
 def humanRound(id, mazo):
     '''Función que gestiona la tirada de un jugador humano. Nos muestra el menú de
@@ -98,31 +107,39 @@ opciones:
 6)Stand
 Option:
 Y ejecuta la acción que elijamos'''
+    pass
 
 def distributionPointAndNewBankCandidates():
     '''Función que realiza el reparto de puntos una vez finalizada una ronda y devuelve
 una lista con los candidatos a la banca ( los que tienen 7,5)'''
+    pass
 
 def printStats(idPlayer="", titulo=""):
     '''Esta función nos imprime los stats de todos los jugadores de la partida.'''
+    pass
 
 def orderPlayersByPriority(listaJugadores):
     '''Ordenamos la lista de jugadores de la partida (contextGame[“game”]) según
 prioridad.'''
+    pass
 
 def printWinner():
     '''Función que muestra el ganador de la partida:'''
+    pass
 
 def insertBBDDCardgame(cardgame):
     '''Función que guarda un nuevo registro en la tabla cardgame.
 Esta función debería llamarse justo después de acabar una partida.'''
+    pass
 
 def insertBBDD_player_game(player_game,cardgame_id):
     '''Función que guarda en la tabla player_game de la BBDD el diccionario
 player_game.
 Esta función debería llamarse justo después de acabar una partida'''
+    pass
 
 def insertBBDD_player_game_round(player_game_round,cardgame_id):
     '''Función que guarda en la tabla player_game_round de la BBDD el diccionario
 player_game_round.
 Esta función debería llamarse justo después de acabar una partida.'''
+    pass
