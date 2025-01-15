@@ -1,3 +1,8 @@
+import random
+from funciones import *
+from parametros import *
+from datos import *
+
 def playGame():
     '''Esta es la función principal del proyecto. Una vez establecido el número de rondas, la
     baraja con la que se va a jugar, y los jugadores que participan en la partida, ésta será
@@ -27,6 +32,35 @@ Se recibe una lista con los id’s de la baraja (mazo), se mezclan, se reparte u
 carta a cada jugador, se ordenan la lista de jugadores de la partida
 (contextGame[“game”]) según la carta que han recibido, y se establecen las
 prioridades.'''
+    # Mezclar el mazo
+    random.shuffle(mazo)
+
+    # Repartir una carta a cada jugador para decidir prioridades
+    for player_id in context_game['game']:
+        player_game[context_game['id_game']][player_id]['initial_card_id'] = mazo.pop[0]
+
+    # Ordenar lista jugadores en función de carta inicial usando método de la burbuja
+    for pasada in range(len(context_game['game']) - 1):
+        for i in range(len(context_game['game']) - pasada - 1):
+            # Comprobar que el número de la carta es mayor
+            id_carta_jugador_actual = player_game[context_game['id_game']][context_game[i]]['initial_card_id']
+            id_carta_jugador_siguiente = player_game[context_game['id_game']][context_game[i + 1]]['initial_card_id']
+
+            seDebeOrdenar = False
+            valorEsMayor = context_game['cards_deck'][id_carta_jugador_actual]['value'] > context_game['cards_deck'][id_carta_jugador_siguiente]['value']
+            if valorEsMayor:
+                seDebeOrdenar = True
+            else: # Si valor carta no es más alto, miramos si es igual
+                valorEsIgual = context_game['cards_deck'][id_carta_jugador_actual]['value'] == context_game['cards_deck'][id_carta_jugador_siguiente]['value']
+                if valorEsIgual: # Si es igual, miramor la prioridad (marcada por el palo de la carta)
+                    prioridadPalo = context_game['cards_deck'][id_carta_jugador_actual]['priority'] < context_game['cards_deck'][id_carta_jugador_siguiente]['priority']
+                    if prioridadPalo:
+                        seDebeOrdenar = True
+
+            if seDebeOrdenar:
+                tmp = context_game['game'][i + 1]
+                context_game['game'][i + 1] = context_game['game'][i]
+                context_game['game'][i] = tmp
 
 def resetPoints():
     '''Función que establece los 20 puntos iniciales en todos los jugadores.'''
