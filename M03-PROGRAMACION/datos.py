@@ -1,9 +1,16 @@
 cartas = {}
-'''cartas = {
-"O01": {"literal": "As de Oros", "value": 1, "priority": 4, "realValue": 1},
-"O02": {"literal": "Dos de Oros", "value": 2, "priority": 4, "realValue": 2},
-"O03": {"literal": "Tres de Oros", "value": 3, "priority": 4, "realValue": 3},
-.....}
+'''
+cartas = {
+    "O01": {
+        "literal": "As de Oros",
+        "value": 1,
+        "priority": 4,
+        "realValue": 1
+    },
+    "O02": {"literal": "Dos de Oros", "value": 2, "priority": 4, "realValue": 2},
+    "O03": {"literal": "Tres de Oros", "value": 3, "priority": 4, "realValue": 3},
+    ...
+}
 Es decir, un diccionario para las cartas, cuyos keys son del tipo:
 ● O01 --> 1 de oros; B12 --> 12 de bastos, E05 --> 5 de espadas ... etc
 Como datos, un nuevo diccionario, donde tenemos el nombre literal de la carta, el
@@ -13,7 +20,28 @@ La prioridad nos da la opción de desempatar cartas que tienen el mismo valor.
 Este diccionario nos servirá para todo lo relacionado con las cartas.'''
 
 players = {}
-'''Es decir, un diccionario donde sus keys son los NIF’s de los jugadores disponibles
+'''
+
+players = {
+    'id_jugador1': {
+        'name': str,
+        'human': bool,
+        'bank': bool,
+        'initialCard': str (el id de la carta),
+        'priority': int,
+        'profile': int (30, 40 o 50),
+        'bet': int,
+        'points': int (empieza la partida con 20),
+        'cards': list (contiene los ids de las cartas, que son str cada uno),
+        'wonPoints': int (incremento de puntos de la ronda)
+    },
+    'id_jugador2: {
+        ...
+    },
+    ...
+}
+
+Es decir, un diccionario donde sus keys son los NIF’s de los jugadores disponibles
 almacenados en BBDD y como valor un nuevo diccionario con los elementos:
 
 ● nombre
@@ -34,18 +62,18 @@ en algún momento y ya estén en BBDD y nos servirá para gestionar todo los
 relacionado con los jugadores'''
 
 game = []
-'''Crearemos una lista, por ejemplo game=[], donde tendremos los NIF de todos los
-jugadores que participen en la partida en cada momento'''
+'''DNIs (que hacen de player_id) de todos los jugadores que participen en la partida en cada momento'''
 
 mazo = []
-'''Crearemos una lista, por ejemplo mazo=[], donde tendremos todos los id’s de las
-cartas que componen el mazo en cada momento.'''
+'''id’s de las cartas que componen el mazo en cada momento.'''
 
 context_game = {}
-'''Crearemos un diccionario, por ejemplo context_game={}, donde tendremos una serie
-de variables de contexto a las que podamos acceder desde cualquier sitio.
-Por ejemplo context_game[«game»] = lista de jugadores en la partida actual
-context_game[«round»] = ronda actual de la partida.
+'''Contiene una serie de variables de contexto a las que podamos acceder desde cualquier sitio:
+
+context_game['game'] = list (jugadores en la partida actual).
+context_game['round'] = int (ronda actual de la partida).
+context_game['id_game'] = str (representa el id de la partida actual).
+
 Tal y como indica su nombre, este diccionario nos será de utilidad para tener, de
 forma ordenada, variables que pueden ser de tipo global.'''
 
@@ -54,8 +82,6 @@ forma ordenada, variables que pueden ser de tipo global.'''
 '''Algunas sugerencias:
 Para la inserción de datos en BBDD, sería conveniente crear un diccionario para cada
 una de las tablas que tengamos que actualizar durante el juego
-
-Por ejemplo (en rojo las claves):
 '''
 
 cardgame = {}
