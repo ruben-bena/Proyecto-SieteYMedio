@@ -15,16 +15,82 @@ def playGame():
     Crear un id de partida
     Mientras hayan dos jugadores o más con puntos, y no nos pasemos del máximo de
     rondas:
-    ordenar jugadores, banca al final y resto de prioridad menor a mayor.
-    Crear una lista con los id’s de cartas ( mazo).
-    Barajar el mazo.
-    Establecer apuestas
-    Ejecutar jugadas de cada jugador.
-    Repartir puntos.
-    Eliminar los jugadores sin puntos.
-    Establecer nueva banca si es necesario.
-    Insertar en BBDD los diccionarios creados para tal propósito.
-    Mostrar el ganador.'''
+        ordenar jugadores, banca al final y resto de prioridad menor a mayor.
+        Crear una lista con los id’s de cartas ( mazo).
+        Barajar el mazo.
+        Establecer apuestas
+        Ejecutar jugadas de cada jugador.
+        Repartir puntos.
+        Eliminar los jugadores sin puntos.
+        Establecer nueva banca si es necesario.
+        Insertar en BBDD los diccionarios creados para tal propósito.
+        Mostrar el ganador.'''
+    # Establecer prioridades de los jugadores:
+    setGamePriority(mazo)
+
+    # Resetear puntos:
+    resetPoints(players)
+
+    # Crear diccionarios cardgame,player_game,player_game_round:
+    cardgame, player_game, player_game_round = generateBBDDvariables() # Crear diccionarios cardgame,player_game,player_game_round
+
+    # Crear un id de partida
+    gameId = getGameId()
+
+    # Mientras hayan dos jugadores o más con puntos, y no nos pasemos del máximo de rondas:
+    while checkMinimun2PlayerWithPoints():
+
+        # ordenar jugadores, banca al final y resto de prioridad menor a mayor:
+        orderPlayersByPriority()
+
+        # Crear una lista con los id’s de cartas (mazo):
+        mazo = [] 
+        for cardId in context_game['cards_deck'].keys():
+            mazo.append(cardId)
+
+        # Barajar el mazo:
+        random.shuffle(mazo)
+
+        # Establecer apuestas:
+        setBets()
+
+        # Ejecutar jugadas de cada jugador:
+        for id in context_game['game']:
+            playerIsHuman = players[id]['human']
+            if playerIsHuman:
+                humanRound(id, mazo)
+            else:
+                standarRound(id, mazo)
+
+        # Repartir puntos:
+        newBankCandidates = distributionPointAndNewBankCandidates()
+
+        # Eliminar los jugadores sin puntos:
+        playersToRemove = []
+        for id in context_game['game']:
+            if players[id]['points'] <= 0:
+                playersToRemove.append(id)
+        if len(playersToRemove) != 0:
+            for id in playersToRemove:
+                context_game['game'].remove(id)
+
+        # Establecer nueva banca si es necesario:
+        setNewBank(newBankCandidates)
+
+    # Insertar en BBDD los diccionarios creados para tal propósito:
+    '''TODO Aquí van las funciones relacionadas con inserción de datos en BBDD.'''
+
+    # Mostrar el ganador:
+    printWinner()
+    '''TODO Al acabar la partida, devolver jugador al menú principal.'''
+
+def generateBBDDvariables():
+    '''Crea y devuelve los diccionarios: cardgame, player_game, player_game_round'''
+    pass
+
+def setNewBank(newBankCandidates):
+    '''Se comprueba si hay una nueva banca entre los posibles candidatos. En caso
+    afirmativo, se realiza el cambio de banca.'''
     pass
 
 def setGamePriority(mazo):
@@ -63,7 +129,7 @@ prioridades.'''
                 context_game['game'][i + 1] = context_game['game'][i]
                 context_game['game'][i] = tmp
 
-def resetPoints():
+def resetPoints(players):
     '''Función que establece los 20 puntos iniciales en todos los jugadores.'''
     for player_id in players:
         players[player_id]['points'] = 20
@@ -89,7 +155,32 @@ prioridad'''
 def setBets():
     '''Función que establece las apuestas de cada jugador en función del tipo de
 jugador.'''
-    pass
+    for player_id in players:
+        player = players[player_id]
+
+        #humano
+        if player["human"]:
+            while True:
+                print(f"\nHumano: {player['name']} tienes {player['points']} puntos disponibles.")
+
+                bet = int(input(f"{player['name']}, ingresa tu apuesta (1 a {player['points']}): "))
+                if 1 <= bet <= player["points"]:
+                    player["bet"] = bet
+                    print(f"{player['name']} ha apostado {player['bet']} puntos.")
+                    break
+                else:
+                    print("La apuesta debe estar entre 1 y tus puntos disponibles.")
+
+        #bot
+        else:
+            if player["points"] > 0:
+                max_bet = player["points"]
+            else:
+                max_bet = 1
+            bet = random.randint(1, max_bet)
+
+            player["bet"] = bet
+            print(f"Bot: {player['name']} ha apostado {player['bet']} puntos.")
 
 def standarRound(id, mazo):
     '''Función que realiza la tirada de cartas de un jugador en función del tipo de
