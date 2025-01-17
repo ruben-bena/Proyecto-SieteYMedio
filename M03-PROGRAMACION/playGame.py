@@ -107,7 +107,35 @@ opciones:
 6)Stand
 Option:
 Y ejecuta la acción que elijamos'''
-    pass
+    inputOptHumanRounds = (
+        '1) View Stats',
+        '2) View Game Stats',
+        '3) Set Bet',
+        '4) Order Card',
+        '5) Automatic Play',
+        '6) Stand')
+    validInputsHumanRound = (1,2,3,4,5,6)
+
+    userInput = getOpt(strSevenAndHalf, inputOptHumanRounds, validInputsHumanRound, playerId=id)
+
+    if userInput == 1:
+        printPlayerStats(id)
+    elif userInput == 2:
+        printStats(id, strSevenAndHalf)
+    elif userInput == 3:
+        validInputsBet = []
+        for n in range(1,21):
+            validInputsBet.append(n)
+        bet = getOpt(strSevenAndHalf, rangeList=validInputsBet, inputName='Set the new Bet', errorName='The New Bet has to be a number between 1 and  20')
+        players[id]['bet'] = bet
+        humanRound(id, mazo)
+    elif userInput == 4:
+        orderNewCard()
+    elif userInput == 5:
+        standarRound(id, mazo)
+    elif userInput == 6:
+        endTurn()
+    
 
 def distributionPointAndNewBankCandidates():
     '''Función que realiza el reparto de puntos una vez finalizada una ronda y devuelve

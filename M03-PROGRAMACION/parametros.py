@@ -3,7 +3,7 @@ lineStart = lineSize // 2 - 10
 initialString = ' ' * lineStart
 
 # Página para generar ASCII: https://patorjk.com/software/taag/#p=display&f=Big%20Money-ne&t=Type%20Something%20
-strMainMenu = '''
+strSevenAndHalf = '''
   /$$$$$$                                                                          /$$       /$$   /$$           /$$  /$$$$$$ 
  /$$__  $$                                                                        | $$      | $$  | $$          | $$ /$$__  $$
 | $$  \__/  /$$$$$$  /$$    /$$ /$$$$$$  /$$$$$$$         /$$$$$$  /$$$$$$$   /$$$$$$$      | $$  | $$  /$$$$$$ | $$| $$  \__/

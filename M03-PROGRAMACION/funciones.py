@@ -27,7 +27,7 @@ def mainMenu():
         '6) Exit')
     validInputsMainMenu = (1,2,3,4,5,6)
     
-    userInput = getOpt(strMainMenu, inputOptMainMenu, validInputsMainMenu)
+    userInput = getOpt(strSevenAndHalf, inputOptMainMenu, validInputsMainMenu)
         
     if userInput == 1:
         addRemovePlayers()
@@ -43,7 +43,7 @@ def mainMenu():
     elif userInput == 6:
         quit
 
-def getOpt(textOpts="", inputOptText=[], rangeList=[], inputName='', errorName=''):
+def getOpt(textOpts="", inputOptText=[], rangeList=[], inputName='', errorName='', playerId=''):
     '''Función para la gestión de menús.
 
     textOpts es un string que será el encabezado.
@@ -60,7 +60,10 @@ def getOpt(textOpts="", inputOptText=[], rangeList=[], inputName='', errorName='
         print('')
         print(textOpts.center(lineSize))
         print('')
-        print('~' * lineSize)
+        if round != '' and playerId != '':
+            print(f'Round {context_game['round']}, Turn of {players[playerId]['name']}'.center(lineSize, str='~'))
+        else:
+            print('~' * lineSize)
         print('')
         for option in inputOptText:
             print(initialString + option.ljust(lineSize - lineStart))
