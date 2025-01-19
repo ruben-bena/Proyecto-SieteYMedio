@@ -274,7 +274,10 @@ una lista con los candidatos a la banca ( los que tienen 7,5)'''
 
 def printStats(idPlayer="", titulo=""):
     '''Imprime los stats de todos los jugadores de la partida.'''
-    print('~' * lineSize)
+    if titulo == '':
+        print('~' * lineSize)
+    else:
+        print(f' STATS AFTER ROUND {context_game['round'] }'.center(lineSize, '~'))
     print()
     print(strGameStats)
     print()
