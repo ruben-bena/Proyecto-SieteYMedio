@@ -95,18 +95,20 @@ def chanceExceedingSevenAndHalf(id, mazo):
     pass
 
 def printPlayerStats(id):
-    '''Esta función nos muestra los stats de un jugador humano.
-name Mario
-type 40
-human True
-bank True
-initialCard E11
-priority 3
-bet 8
-points 20
-cards C07
-roundPoints 0'''
-    pass
+    '''Esta función nos muestra los stats de un jugador humano.'''
+    print('~' * lineSize)
+    print()
+    print(strPlayerStats)
+    print()
+    print('~' * lineSize)
+    playerName = players[id]['name']
+    print(f'Stats of {playerName}'.center(lineSize, str='~'))
+    print()
+    for nombreClave in players[id].keys():
+        valorClave = str(players[id][nombreClave])
+        print(initialString + nombreClave.left(20) + valorClave)
+    print()
+    _ = input(initialString + 'Enter to continue')
 
 def logToFile(text):
     '''Esta función nos puede servir para enviar mensajes de texto al archivo
