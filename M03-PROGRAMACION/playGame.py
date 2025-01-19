@@ -103,24 +103,27 @@ prioridades.'''
     random.shuffle(mazo)
 
     # Repartir una carta a cada jugador para decidir prioridades
-    for player_id in context_game['game']:
-        player_game[context_game['id_game']][player_id]['initial_card_id'] = mazo.pop[0]
+    for id in context_game['game']:
+        players[id]['initialCard'] = mazo.pop[0]
+        ###player_game[context_game['id_game']][id]['initial_card_id'] = mazo.pop[0]
 
     # Ordenar lista jugadores en función de carta inicial usando método de la burbuja
     for pasada in range(len(context_game['game']) - 1):
         for i in range(len(context_game['game']) - pasada - 1):
             # Comprobar que el número de la carta es mayor
-            id_carta_jugador_actual = player_game[context_game['id_game']][context_game[i]]['initial_card_id']
-            id_carta_jugador_siguiente = player_game[context_game['id_game']][context_game[i + 1]]['initial_card_id']
+            idJugadorActual = context_game[i]
+            idCartaJugadorActual = players[idJugadorActual]['initialCard']
+            idJugadorSiguiente = context_game[i+1]
+            idCartaJugadorSiguiente = players[idJugadorActual]['initialCard']
 
             seDebeOrdenar = False
-            valorEsMayor = context_game['cards_deck'][id_carta_jugador_actual]['value'] > context_game['cards_deck'][id_carta_jugador_siguiente]['value']
+            valorEsMayor = context_game['cards_deck'][idCartaJugadorActual]['value'] > context_game['cards_deck'][idCartaJugadorSiguiente]['value']
             if valorEsMayor:
                 seDebeOrdenar = True
             else: # Si valor carta no es más alto, miramos si es igual
-                valorEsIgual = context_game['cards_deck'][id_carta_jugador_actual]['value'] == context_game['cards_deck'][id_carta_jugador_siguiente]['value']
+                valorEsIgual = context_game['cards_deck'][idCartaJugadorActual]['value'] == context_game['cards_deck'][idCartaJugadorSiguiente]['value']
                 if valorEsIgual: # Si es igual, miramor la prioridad (marcada por el palo de la carta)
-                    prioridadPalo = context_game['cards_deck'][id_carta_jugador_actual]['priority'] < context_game['cards_deck'][id_carta_jugador_siguiente]['priority']
+                    prioridadPalo = context_game['cards_deck'][idCartaJugadorActual]['priority'] < context_game['cards_deck'][idCartaJugadorSiguiente]['priority']
                     if prioridadPalo:
                         seDebeOrdenar = True
 
