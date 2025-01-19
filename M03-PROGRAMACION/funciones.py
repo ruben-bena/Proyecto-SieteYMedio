@@ -282,7 +282,7 @@ def setNewPlayer(human=True):
             dni = getOpt(strNewPlayer, inputOptText=[f'name = {name}'], rangeList=[], inputName='DNI')
             if validDNI(dni):
                 break
-            _ = input('Invalid DNI! 8 letters and 1 number required\nEnter to Continue')
+            _ = input('Invalid DNI! 8 numbers and 1 upper letter required\nEnter to Continue')
     else:
         dni = newRandomDNI()
 
