@@ -237,8 +237,25 @@ una lista con los candidatos a la banca ( los que tienen 7,5)'''
     pass
 
 def printStats(idPlayer="", titulo=""):
-    '''Esta función nos imprime los stats de todos los jugadores de la partida.'''
-    pass
+    '''Imprime los stats de todos los jugadores de la partida.'''
+    print('~' * lineSize)
+    print()
+    print(strGameStats)
+    print()
+    print('~' * lineSize)
+    if idPlayer != '':
+        playerName = players[idPlayer]['name']
+        print(f'Round {context_game['round']}, Turn of {playerName}'.center(lineSize, '~'))
+    print()
+    for nombreClave in players[idPlayer]:
+        line = ''
+        line += nombreClave.ljust(20)
+        for id in context_game['game']:
+            valorClave = players[id][nombreClave]
+            line += f'{valorClave}'.ljust(40)
+        print(line)
+    print()
+    _ = input(initialString + 'Enter to Continue')
 
 def orderPlayersByPriority(listaJugadores):
     '''Ordenamos la lista de jugadores de la partida (contextGame[“game”]) según

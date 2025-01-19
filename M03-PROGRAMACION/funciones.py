@@ -102,7 +102,7 @@ def printPlayerStats(id):
     print()
     print('~' * lineSize)
     playerName = players[id]['name']
-    print(f'Stats of {playerName}'.center(lineSize, str='~'))
+    print(f'Stats of {playerName}'.center(lineSize, '~'))
     print()
     for nombreClave in players[id].keys():
         valorClave = str(players[id][nombreClave])
