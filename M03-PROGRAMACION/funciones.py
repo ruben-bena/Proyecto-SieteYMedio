@@ -91,8 +91,17 @@ def orderPlayersByPoints(listaJugadores):
     pass
 
 def chanceExceedingSevenAndHalf(id, mazo):
-    '''Función que calcula la probabilidad de pasarse de siete y medio'''
-    pass
+    '''Función que calcula la probabilidad (en %) de pasarse de siete y medio.'''
+    nCartasTotales = len(mazo)
+    nCartasExceder = 0
+    puntosActuales = getPlayerCardPoints(id)
+    for idCarta in mazo:
+        puntosCarta = context_game[idCarta]['value']
+        pasamosSieteYMedio = (puntosActuales + puntosCarta) > 7.5
+        if pasamosSieteYMedio:
+            nCartasExceder += 1
+    probabilidadPasarSieteYMedio = (nCartasExceder / nCartasTotales) * 100
+    return probabilidadPasarSieteYMedio
 
 def printPlayerStats(id):
     '''Esta función nos muestra los stats de un jugador humano.'''
