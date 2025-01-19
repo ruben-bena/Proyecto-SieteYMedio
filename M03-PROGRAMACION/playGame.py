@@ -261,8 +261,11 @@ def orderCard(id, mazo):
     _ = input(initialString + 'Enter to Continue')
 
 def getPlayerCardPoints(id):
-    '''Retorna los puntos de un jugador en función de sus cartas.'''
-    pass
+    '''Retorna los puntos de cartas de un jugador.'''
+    playerCardPoints = 0
+    for idCard in players[id]['cards']:
+        playerCardPoints += context_game['cards_deck']['value']
+    return playerCardPoints
 
 def distributionPointAndNewBankCandidates():
     '''Función que realiza el reparto de puntos una vez finalizada una ronda y devuelve
