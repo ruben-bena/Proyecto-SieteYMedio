@@ -21,7 +21,6 @@ Este diccionario nos servirá para todo lo relacionado con las cartas.'''
 
 players = {}
 '''
-
 players = {
     'id_jugador1': {
         'name': str,
@@ -73,6 +72,8 @@ context_game = {}
 context_game['game'] = list (jugadores en la partida actual).
 context_game['round'] = int (ronda actual de la partida).
 context_game['id_game'] = str (representa el id de la partida actual).
+context_game['maxRounds'] = int (represente el número máximo de rondas en la partida).
+context_game['cards_deck'] = dict (representa lo mismo que haría la variable 'cartas').
 
 Tal y como indica su nombre, este diccionario nos será de utilidad para tener, de
 forma ordenada, variables que pueden ser de tipo global.'''

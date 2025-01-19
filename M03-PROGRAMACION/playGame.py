@@ -224,12 +224,45 @@ Y ejecuta la acción que elijamos'''
         players[id]['bet'] = bet
         humanRound(id, mazo)
     elif userInput == 4:
-        orderNewCard()
+        orderCard(id, mazo)
+        humanRound(id, mazo)
     elif userInput == 5:
         standarRound(id, mazo)
     elif userInput == 6:
         endTurn()
     
+def orderCard(id, mazo):
+    '''Pide una carta al jugador.'''
+    print(initialString + ' Order Card')
+
+    # Variables bloque condicional
+    jugadorQuiereCarta = False
+    jugadorSinCartas = len(players[id]['cards']) == 0
+
+    # Si jugador ya tiene cartas, preguntar si quiere pedir carta
+    if not jugadorSinCartas:
+        posibilidadDePasarse = chanceExceedingSevenAndHalf(id, mazo)
+        print(initialString + f'Chance of exceed 7,5 = {posibilidadDePasarse:.02} %')
+        userInput = input(initialString + 'Do you want another card? Y/y = yes, any other key = Not')
+        if userInput == 'Y' or userInput == 'y':
+            jugadorQuiereCarta = True
+
+    if jugadorQuiereCarta or jugadorSinCartas:
+        # Sacar carta del mazo. Añadirla carta y puntos a jugador
+        idCarta = mazo.pop[0]
+        players[id]['cards'].append(idCarta)
+
+        # Imprimir info por pantalla
+        nombreCarta = context_game['cards_deck']['literal']
+        print(initialString + f'The new card is {nombreCarta}')
+        playerCardPoints = getPlayerCardPoints(id)
+        print(initialString + f'Now you have {playerCardPoints} points')
+
+    _ = input(initialString + 'Enter to Continue')
+
+def getPlayerCardPoints(id):
+    '''Retorna los puntos de un jugador en función de sus cartas.'''
+    pass
 
 def distributionPointAndNewBankCandidates():
     '''Función que realiza el reparto de puntos una vez finalizada una ronda y devuelve
