@@ -869,13 +869,66 @@ def getPlayerCardPoints(id):
     '''Retorna los puntos de cartas de un jugador.'''
     playerCardPoints = 0
     for idCard in players[id]['cards']:
-        playerCardPoints += context_game['cards_deck']['value']
+        playerCardPoints += context_game['cards_deck'][idCard]['value']
     return playerCardPoints
+
+def getBankId():
+    '''Retorna el ID de la banca.'''
+    for player_id in context_game['game']:
+        playerIsBank = players[player_id]['bank']
+        if playerIsBank:
+            bank_id = player_id
+            break
+    return bank_id
 
 def distributionPointAndNewBankCandidates():
     '''Función que realiza el reparto de puntos una vez finalizada una ronda y devuelve
-una lista con los candidatos a la banca ( los que tienen 7,5)'''
-    
+    una lista con los candidatos a la banca ( los que tienen 7,5)'''
+    # Repartir puntos a cada jugador
+    bank_id = getBankId()
+    bankRoundPoints = players[bank_id]['roundPoints']
+    for player_id in context_game['game']:
+        if player_id != bank_id:
+
+            # Declarar variables para bucle condicional
+            playerRoundPoints = players[player_id]['roundPoints']
+            bankWonToPlayer = (bankRoundPoints >= playerRoundPoints) and (bankRoundPoints <= 7.5)
+            playerWonToBank = (bankRoundPoints < playerRoundPoints) and (playerRoundPoints <= 7.5)
+            deltaPoints = 0 # Si no ha ganado ni banca ni jugador (ambos han pasado 7.5), se mantendrá este valor
+            
+            # Si jugador gana a banca
+            if playerWonToBank:
+                if playerRoundPoints == 7.5:
+                    deltaPoints += players[player_id]['bet'] * 2
+                else:
+                    deltaPoints += players[player_id]['bet']
+
+            # Si banca gana a jugador
+            elif bankWonToPlayer:
+                deltaPoints -= players[player_id]['bet']
+
+            # Realizar transacción de puntos
+            players[player_id]['points'] += deltaPoints
+            players[bank_id]['points'] -= deltaPoints
+
+    # Comprobar si hay nuevos candidatos a banca
+    newBankCandidates = []
+    bankGotSevenAndHalf = False
+    for player_id in context_game['game']:
+        # Comprobar si jugador ha sacado 7.5, y comprobar si es banca
+        playerIsBank = players[player_id]['bank']
+        playerGotSevenAndHalf = (players[player_id]['roundPoints'] == 7.5)
+        if playerGotSevenAndHalf and playerIsBank:
+            bankGotSevenAndHalf = True
+            break
+        elif playerGotSevenAndHalf and not playerIsBank:
+            newBankCandidates.append(player_id)
+
+    # Borrar lista candidatos si banca saca 7.5
+    if bankGotSevenAndHalf:
+        newBankCandidates = []
+
+    return newBankCandidates
 
 def printStats(idPlayer="", titulo=""):
     '''Imprime los stats de todos los jugadores de la partida.'''
