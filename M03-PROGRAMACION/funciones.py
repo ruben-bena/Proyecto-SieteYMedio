@@ -585,10 +585,27 @@ def removeDefeatedPlayers():
             # Borrar jugador de partida
             context_game['game'].remove(id)
 
+def getHighestPriorityID(playerList):
+    '''Retorna el ID del jugador con más prioridad de la lista.'''
+    highestPriorityID = ''
+    highestPriorityValue = len(context_game['game']) + 1
+    for player_id in playerList:
+        playerPriorityValue = players[player_id]['priority']
+        hasMorePriority = playerPriorityValue < highestPriorityValue
+        if hasMorePriority:
+            highestPriorityID = player_id
+            highestPriorityValue = playerPriorityValue
+    return highestPriorityID
+
 def setNewBank(newBankCandidates):
-    '''Se comprueba si hay una nueva banca entre los posibles candidatos. En caso
-    afirmativo, se realiza el cambio de banca.'''
-    pass
+    '''Realiza el cambio de banca al jugador con mayor prioridad.'''
+    # Quitar anterior banca
+    bank_id = getBankId()
+    players[bank_id]['bank'] = False
+
+    # Asignar nueva banca (candidato con mayor prioridad)
+    new_bank_id = getHighestPriorityID(playerList=newBankCandidates)
+    players[new_bank_id]['bank'] = True
 
 def setGamePriority(mazo, giveInitialCard=True):
     '''Esta función establece las prioridades de los jugadores.
