@@ -1,0 +1,308 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+  
+h2{
+    margin: 0;
+    padding: auto;
+    display: flex;
+    text-align: left;
+    color: rgb(255, 255, 255);
+}
+h1 {
+    color: black;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: rgb(1, 65, 7);
+    color: #fff;
+    line-height: 1.6;
+}
+
+header {
+    background-color: rgb(1, 65, 7);
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    padding: 10px 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header .contenedor {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-between; 
+    align-items: center;
+    max-width: 1200px; 
+    width: 100%;
+    margin: 0 auto; 
+    gap: 20px; 
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+header .logo img {
+    height: 100px;
+    transition: transform 0.3s ease;
+}
+
+header .logo img:hover {
+    transform: scale(1.1); 
+}
+header .logo h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+    transition: color 0.3s ease;
+}
+
+header nav {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 20px; 
+    justify-content: center;
+    align-items: center;
+}
+
+header a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+}
+
+header a:hover {
+    color: goldenrod;
+}
+
+.contenido-contenedor {
+    background-color: rgb(197, 196, 185);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#logica-banca .contenedor{ 
+    background-color: rgb(255, 255, 255);
+    text-align: center;
+    padding: 200px 12px;
+    margin-bottom: 50px;
+    align-content: center;
+}
+
+#logica-boot .contenedor{
+    background-color: rgb(255, 255, 255);
+    text-align: center;
+    padding: 200px 12px;
+    margin-bottom: 50px;
+    align-content: center;
+}
+
+#prioridad-jugadores .contenedor{
+    background-color: rgb(255, 255, 255);
+    text-align: center;
+    padding: 200px 12px;
+    margin-bottom: 50px;
+    align-content: center;
+}
+
+#bbdd .contenedor{
+    background-color: rgb(255, 255, 255);
+    text-align: center;
+    padding: 200px 12px;
+    margin-bottom: 50px;
+    align-content: center;
+}
+
+#logica-banca .img-contenedor:hover{
+    transform: scale(1.05);
+    filter: brightness(1.2);
+}
+
+#logica-boot .img-contenedor:hover{
+    transform: scale(1.05);
+    filter: brightness(1.2);
+}
+
+#prioridad-jugadores .img-contenedor:hover{
+    transform: scale(1.05);
+    filter: brightness(1.2);
+}
+
+#bbdd .img-contenedor:hover{
+    transform: scale(1.05);
+    filter: brightness(1.2);
+}
+
+.fila {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.texto h2 {
+    color: #013b04;
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+.texto h4 {
+    color: rgb(0, 0, 0);
+    font-size: 1em;
+}
+
+footer {
+    background-color: rgb(1, 65, 7);
+    padding: 20px;
+    margin-top: 50px;
+    text-align: center;
+}
+
+footer p {
+    color: white;
+}
+
+.color-acento {
+    color: rgb(185, 130, 27);
+}
+  
+  @media (min-width: 720px){
+    header{
+        position: fixed;
+        width: 100%;
+    }
+    header .container{
+        flex-direction: row;
+        justify-content: space-between;
+    }
+  
+    header nav{
+        flex-direction: row-reverse;
+        padding-bottom: 0;
+        padding-right: 20px;
+    }    
+
+    #logica-banca .contenedor{
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    #logica-banca .texto{
+        width: 50%;
+        max-width: 600px ;
+        text-align: initial;
+        padding-left: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    #logica-banca .img-contenedor{
+        background-image: url(https://play-lh.googleusercontent.com/siAEs0c8h7cXRthehDgRSXh74Bt9NvaO1Zw4LrpN6znHvXHFRThqZXrdM18XhLWmAQ);
+        background-size: cover;
+        background-position: center center;
+        border-radius: 15px;
+        height: 500px;
+        width: 400px;
+        margin: 50px;
+        transition: transform 0.5s ease, filter 0.5s ease;
+    }
+
+    #logica-boot .contenedor{
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    #logica-boot .texto{
+        width: 50%;
+        max-width: 600px ;
+        text-align: initial;
+        padding-left: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    #logica-boot .img-contenedor{
+        background-image: url(https://play-lh.googleusercontent.com/siAEs0c8h7cXRthehDgRSXh74Bt9NvaO1Zw4LrpN6znHvXHFRThqZXrdM18XhLWmAQ);
+        background-size: cover;
+        background-position: center center;
+        border-radius: 15px;
+        height: 500px;
+        width: 400px;
+        margin: 50px;
+        transition: transform 0.5s ease, filter 0.5s ease;
+    }
+
+    #prioridad-jugadores .contenedor{
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    #prioridad-jugadores .texto{
+        width: 50%;
+        max-width: 600px ;
+        text-align: initial;
+        padding-left: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    #prioridad-jugadores .img-contenedor{
+        background-image: url(https://play-lh.googleusercontent.com/siAEs0c8h7cXRthehDgRSXh74Bt9NvaO1Zw4LrpN6znHvXHFRThqZXrdM18XhLWmAQ);
+        background-size: cover;
+        background-position: center center;
+        border-radius: 15px;
+        height: 500px;
+        width: 400px;
+        margin: 50px;
+        transition: transform 0.5s ease, filter 0.5s ease;
+    }
+
+    #bbdd .contenedor{
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    #bbdd .texto{
+        width: 50%;
+        max-width: 600px ;
+        text-align: initial;
+        padding-left: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    #bbdd .img-contenedor{
+        background-image: url(https://play-lh.googleusercontent.com/siAEs0c8h7cXRthehDgRSXh74Bt9NvaO1Zw4LrpN6znHvXHFRThqZXrdM18XhLWmAQ);
+        background-size: cover;
+        background-position: center center;
+        border-radius: 15px;
+        height: 500px;
+        width: 400px;
+        margin: 50px;
+        transition: transform 0.5s ease, filter 0.5s ease;
+  }
+}

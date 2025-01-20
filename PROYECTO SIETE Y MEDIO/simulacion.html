@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TUTORIAL</title>
+  <link rel="stylesheet" href="simulacion.css">
+  <link rel="icon" type="image/png" href="imagen/logopagina.png">
+ 
+
+  <body>
+  <header>
+    <div class="contenedor">
+        <a href="index.html" class="logo">
+            <img src="imagen/baraja.png" alt="logo">
+            <h2 class="logo-nombre">SEVEN AND A HALF</h2>             
+        </a>
+        <nav>
+            <a href="equipo.html">Equipo</a>
+            <a href="programacion.html">Programación</a>  
+            <a href="simulacion.html">Tutorial</a>              
+            <a href="index.html">Página Principal</a>
+        </nav>
+    </div>
+</header>
+
+<section id="cartas">
+    <div class="contenedor">
+        <div class="contenido-contenedor">
+            <div class="fila">
+                <div class="img-contenedor"></div>
+                <div class="texto">
+                    <h2><span class="color-acento">BARAJA CARTAS</span></h2>
+                    <h4>
+                       La dinámica del juego es utilizar una baraja española de 40 cartas. Las cartas se dividen en cuatro palos: oros, copas, espadas y bastos. 
+                        Los valores son los siguientes:
+                        <ul>
+                            <li>Del 1 al 7: Cada carta vale su valor nominal (por ejemplo, el 5 de oros vale 5 puntos).</li>
+                            <li>Sota, caballo y rey: Cada una de estas cartas vale medio punto.</li>
+                        </ul>
+                        No se usan las cartas 8, 9 y 10. Este sistema de valores es esencial para calcular la puntuación en cada mano del juego.
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="tutorial">
+    <div class="contenedor">
+        <div class="contenido-contenedor">
+            <div class="fila">
+                <div class="img-contenedor"></div>
+                <div class="texto">
+                    <h2><span class="color-acento">TUTORIAL</span></h2>
+                    <h4>
+                        Para jugar al "Siete y Medio", sigue estos pasos:
+                        <ol>
+                            <li>Elige quién será la banca: Esta persona reparte las cartas y juega contra el resto.</li>
+                            <li>Cada jugador recibe una carta inicial boca arriba. La banca decide si su carta estará boca arriba o boca abajo.</li>
+                            <li>Por turnos, los jugadores pueden "pedir" cartas adicionales para acercarse a 7 y medio o "plantarse" si creen que tienen un puntaje seguro.</li>
+                            <li>Si un jugador excede 7 y medio, pierde automáticamente la partida.</li>
+                            <li>La banca juega al final y debe intentar superar las puntuaciones de los jugadores sin pasarse.</li>
+                            <li>El jugador más cercano a 7 y medio sin pasarse gana la ronda. En caso de empate, gana la banca.</li>
+                        </ol>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section id="simulador">
+    <div class="contenedor">
+        <div class="contenido-contenedor">
+            <div class="fila">
+                <div class="texto">
+                    <h2><span class="color-acento">PUNTAJE</span></h2>
+                    <h4> Con este simulador de puntaje se podrá entender mejor la dinámica al respecto
+                        de los puntos que equivalen cada carta. <br>
+                        Recuerda que una vez obtenido una cantidad de puntos inferior a 7.5, siempre va a existir
+                        la opción de plantarte y quedarte cerca o de arriesgarte e intentar alcanzar más este valor.
+                    </h4>
+                            <h1>Simulación del juego</h1>
+    
+                            <button class="botoncartas" onclick="repartirCartas()">Repartir Cartas</button>
+            
+                        <div id="resultado" class="resultado"></div>
+                    <script src="simulacion.js"></script> 
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="contenedor">
+        <p>&copy; Marc Pino - Laura Toro - Rubén Bellido </p>
+    </div>
+</footer>
+</html>

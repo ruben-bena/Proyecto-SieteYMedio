@@ -1,0 +1,305 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    margin: 0;
+    padding: auto;
+    display: flex;
+    text-align: left;
+    color: rgb(255, 255, 255);
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    background-color: rgb(255, 255, 255);
+    color: #fff;
+    line-height: 1.6;
+}
+
+header {
+    background-color: rgb(1, 65, 7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header .contenedor {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    gap: 20px;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+header .logo img {
+    height: 100px;
+    transition: transform 0.3s ease;
+}
+
+header .logo img:hover {
+    transform: scale(1.1);
+}
+
+header .logo h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+    transition: color 0.3s ease;
+}
+
+header nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+header a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+}
+
+header a:hover {
+    color: goldenrod;
+}
+
+.contenido-contenedor {
+    background-color: rgb(197, 196, 185);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+section {
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: rgb(255, 255, 255);
+}
+
+#resumen {
+    background-color: #f3f3f3;
+    border-left: 5px solid #013b04;
+}
+
+#integrante1 {
+    
+    background-color: #fef7e0;
+    border-left: 5px solid #b8671b;
+}
+
+#integrante2 {
+    background-color: #f9e2e2;
+    border-left: 5px solid #9e3030;
+
+}
+
+#integrante3 {
+    background-color: #eaf7ea;
+    border-left: 5px solid #104f5f;
+}
+
+#resumen .img-contenedor:hover{
+    transform: scale(1.05);
+    filter: brightness(1.2);
+} 
+
+#integrante1 .img-contenedor:hover{
+    transform: scale(1.05);
+    filter: brightness(1.2);
+}
+
+#integrante2 .img-contenedor:hover{
+    transform: scale(1.05);
+    filter: brightness(1.2);
+}
+
+#integrante3 .img-contenedor:hover {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+}
+.fila {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.texto h2 {
+    color: #013b04;
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+.texto h4 {
+    color: rgb(0, 0, 0);
+    font-size: 1em;
+}
+
+footer {
+    background-color: rgb(1, 65, 7);
+    padding: 20px;
+    margin-top: 50px;
+    text-align: center;
+}
+
+footer p {
+    color: white;
+}
+
+.color-acento {
+    color: rgb(185, 130, 27);
+}
+
+@media (min-width: 720px) {
+    header {
+        position: fixed;
+        width: 100%;
+    }
+
+    header .container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    header nav {
+        flex-direction: row-reverse;
+        padding-bottom: 0;
+        padding-right: 20px;
+    }
+
+    #resumen .contenedor {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    #resumen .texto {
+        width: 50%;
+        max-width: 600px;
+        text-align: initial;
+        padding-left: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    #resumen .img-contenedor {
+        background-image: url(https://www.pixartprinting.it/blog/wp-content/uploads/2022/11/IMMAGINE-1.jpg);
+        background-size: cover;
+        background-position: center center;
+        border-radius: 15px;
+        height: 500px;
+        width: 400px;
+        margin: 50px;
+        transition: transform 0.5s ease, filter 0.5s ease;
+    }
+
+    #integrante1 .contenedor {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    #integrante1 .texto {
+        width: 50%;
+        max-width: 600px;
+        text-align: initial;
+        padding-left: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    #integrante1 .img-contenedor {
+        background-image: url(https://learn.microsoft.com/es-es/training/achievements/work-mysql-databases-azure.svg);
+        background-size: cover;
+        background-position: center center;
+        border-radius: 15px;
+        height: 500px;
+        width: 400px;
+        margin: 50px;
+        transition: transform 0.5s ease, filter 0.5s ease;
+    }
+
+    #integrante2 .contenedor {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    #integrante2 .texto {
+        width: 50%;
+        max-width: 600px;
+        text-align: initial;
+        padding-left: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    #integrante2 .img-contenedor {
+        background-image: url(https://static.skillshare.com/uploads/video/thumbnails/c38251fc34fe43812b476c376c5d6945/1280-720);
+        background-size: cover;
+        background-position: center center;
+        border-radius: 15px;
+        height: 500px;
+        width: 400px;
+        margin: 50px;
+        transition: transform 0.5s ease, filter 0.5s ease;
+    }
+
+    #integrante3 .contenedor {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    #integrante3 .texto {
+        width: 50%;
+        max-width: 600px;
+        text-align: initial;
+        padding-left: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    #integrante3 .img-contenedor {
+        background-image: url(https://e0.pxfuel.com/wallpapers/275/590/desktop-wallpaper-python-phone-if-anyone-is-interested-r-python-python-programming-language.jpg);
+        background-size: cover;
+        background-position: center center;
+        border-radius: 15px;
+        height: 500px;
+        width: 400px;
+        margin: 50px;
+        transition: transform 0.5s ease, filter 0.5s ease;
+    }
+}
