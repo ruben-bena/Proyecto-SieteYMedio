@@ -2,6 +2,7 @@ import os
 import random
 import string
 import datetime
+import math
 
 from parametros import *
 from datos import *
@@ -701,32 +702,11 @@ prioridad'''
 def setBets():
     '''Función que establece las apuestas de cada jugador en función del tipo de
 jugador.'''
-    for player_id in players:
-        player = players[player_id]
-
-        #humano
-        if player["human"]:
-            while True:
-                print(f"\nHumano: {player['name']} tienes {player['points']} puntos disponibles.")
-
-                bet = int(input(f"{player['name']}, ingresa tu apuesta (1 a {player['points']}): "))
-                if 1 <= bet <= player["points"]:
-                    player["bet"] = bet
-                    print(f"{player['name']} ha apostado {player['bet']} puntos.")
-                    break
-                else:
-                    print("La apuesta debe estar entre 1 y tus puntos disponibles.")
-
-        #bot
-        else:
-            if player["points"] > 0:
-                max_bet = player["points"]
-            else:
-                max_bet = 1
-            bet = random.randint(1, max_bet)
-
-            player["bet"] = bet
-            print(f"Bot: {player['name']} ha apostado {player['bet']} puntos.")
+    for player_id in context_game['game']:
+        puntos_actuales = players[player_id]['points']
+        perfil = players[player_id]['profile']
+        puntos_apostados = math.floor(puntos_actuales * (perfil / 100)) # math.floor redondea a un número entero por abajo
+        players[player_id]['bet'] = puntos_apostados
 
 def standarRound(id, mazo):
     '''Función que realiza la tirada de cartas de un jugador en función del tipo de
@@ -817,6 +797,7 @@ una lista con los candidatos a la banca ( los que tienen 7,5)'''
 
 def printStats(idPlayer="", titulo=""):
     '''Imprime los stats de todos los jugadores de la partida.'''
+    # TODO Implementar funcionalidad para que imprima 3 jugadores máximo por fila
     if titulo == '':
         print('~' * lineSize)
     else:
@@ -846,7 +827,19 @@ prioridad.'''
 
 def printWinner():
     '''Función que muestra el ganador de la partida:'''
-    pass
+    print('~' * lineSize)
+    print()
+    print(strGameOver)
+    print()
+    print('~' * lineSize)
+    print()
+
+    id_winner = max(context_game['game'], key=lambda x:players[x]['points'])
+    name_winner = players[id_winner]['name']
+    points_winner = players[id_winner]['points']
+    print(initialString + f'The winner is {id_winner} - {name_winner}, in {context_game['round']}, with {points_winner} points!')
+
+    _ = input(initialString + 'Enter to continue')
 
 def insertBBDDCardgame(cardgame):
     '''Función que guarda un nuevo registro en la tabla cardgame.
