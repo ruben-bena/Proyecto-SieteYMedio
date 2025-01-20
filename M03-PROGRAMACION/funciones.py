@@ -720,9 +720,28 @@ def checkBankWonRound(bank_id):
                 return False
     return True
 
-def checkBankIsDefeated(id):
+def checkBankIsDefeated(bank_id):
     '''Retorna True si la banca pierde la partida (0 puntos) con sus cartas actuales.'''
-    pass
+    bankPoints = players[bank_id]['points']
+    bankRoundPoints = players[bank_id]['roundPoints']
+    # Calcular puntos que quedarían a la banca con cartas actuales
+    for player_id in context_game['game']:
+        if player_id != bank_id:
+            # Comprobar si jugador gana a banca
+            playerRoundPoints = players[player_id]['roundPoints']
+            playerWinsToBank = (playerRoundPoints > bankRoundPoints) and (playerRoundPoints <= 7.5)
+
+            # Dar o quitar puntos dependiendo de quién gane
+            playerBetPoints = players[player_id]['bet']
+            if playerWinsToBank:
+                bankPoints -= playerBetPoints
+            else:
+                bankPoints += playerBetPoints
+
+    # Comprobar si banca pierde partida
+    if bankPoints <= 0:
+        return True
+    return False
 
 def checkBankLosesRound(bank_id):
     '''Retorna True si la banca pierde la ronda contra TODOS los jugadores con sus cartas actuales.'''
@@ -743,13 +762,13 @@ jugador que es y teniendo en cuenta si el jugador es banca o no.'''
 
     if playerIsBank:
         while True:
-            bankWonRound = checkBankWonRound(id) # Banca ya ha ganado la ronda, sin necesitar más cartas
+            bankWonRound = checkBankWonRound(id) # Banca gana la ronda, sin necesitar más cartas
             if bankWonRound:
                 break
 
             bankOrdersCard = False
-            bankIsDefeated = checkBankIsDefeated(id) # Banca se queda sin puntos si no pide más cartas
-            bankLosesRound = checkBankLosesRound(id) # Banca no gana a ningún jugador esta ronda
+            bankIsDefeated = checkBankIsDefeated(id) # Banca pierde partida (<= 0 puntos) si no pide más cartas
+            bankLosesRound = checkBankLosesRound(id) # Banca no gana a NINGÚN jugador esta ronda
             if bankIsDefeated or bankLosesRound:
                 bankOrdersCard = True
             # Comprobar si pide carta según perfil de riesgo
