@@ -151,7 +151,13 @@ def fill_player_game_round(player_game_round,round,*fields):
 
 def checkMinimun2PlayerWithPoints():
     '''Función que verifica que al menos haya dos jugadores con puntos.'''
-    pass
+    nPlayersWithPoints = 0
+    for player_id in context_game['game']:
+        if players[player_id]['points'] > 0:
+            nPlayersWithPoints += 1
+            if nPlayersWithPoints >= 2:
+                return True
+    return False
 
 def orderAllPlayers():
     '''Función que ordena los jugadores de la partida (contextGame[“game”]) de forma
