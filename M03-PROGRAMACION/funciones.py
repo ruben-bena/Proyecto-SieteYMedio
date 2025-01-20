@@ -513,7 +513,7 @@ def playGame():
     '''Esta es la función principal del proyecto. Una vez establecido el número de rondas, la
     baraja con la que se va a jugar, y los jugadores que participan en la partida, ésta será
     la función que gestione toda la partida. Para ello, hará uso de otras funciones.'''
-    # Establecer prioridades de los jugadores:
+    # Establecer prioridades iniciales de los jugadores:
     setGamePriority(mazo)
 
     # Resetear puntos:
@@ -527,6 +527,9 @@ def playGame():
 
     # Mientras hayan dos jugadores o más con puntos, y no nos pasemos del máximo de rondas:
     while checkMinimun2PlayerWithPoints() and checkRounds():
+
+        # Establecer prioridad de los jugadores, SIN DAR CARTA INICIAL
+        setGamePriority(mazo, giveInitialCard=False)
 
         # ordenar jugadores, banca al final y resto de prioridad menor a mayor:
         orderPlayersByPriority()
@@ -590,43 +593,34 @@ def setNewBank(newBankCandidates):
     afirmativo, se realiza el cambio de banca.'''
     pass
 
-def setGamePriority(mazo):
+def setGamePriority(mazo, giveInitialCard=True):
     '''Esta función establece las prioridades de los jugadores.
-Se recibe una lista con los id’s de la baraja (mazo), se mezclan, se reparte una
-carta a cada jugador, se ordenan la lista de jugadores de la partida
-(contextGame[“game”]) según la carta que han recibido, y se establecen las
-prioridades.'''
-    # Mezclar el mazo
-    random.shuffle(mazo)
+    Se recibe una lista con los id’s de la baraja (mazo), se mezclan, se reparte una
+    carta a cada jugador, se ordenan la lista de jugadores de la partida
+    (contextGame[“game”]) según la carta que han recibido, y se establecen las
+    prioridades.'''
+    
+    if giveInitialCard:
+        # Mezclar el mazo
+        random.shuffle(mazo)
 
-    # Repartir una carta a cada jugador para decidir prioridades
-    for id in context_game['game']:
-        players[id]['initialCard'] = mazo.pop[0]
+        # Repartir una carta a cada jugador para decidir prioridades
+        for id in context_game['game']:
+            players[id]['initialCard'] = mazo.pop[0]
 
     # Ordenar lista jugadores en función de carta inicial usando método de la burbuja
-    for pasada in range(len(context_game['game']) - 1):
-        for i in range(len(context_game['game']) - pasada - 1):
-            # Comprobar que el número de la carta es mayor
-            idJugadorActual = context_game[i]
-            idCartaJugadorActual = players[idJugadorActual]['initialCard']
-            idJugadorSiguiente = context_game[i+1]
-            idCartaJugadorSiguiente = players[idJugadorActual]['initialCard']
+    orderAllPlayers()
 
-            seDebeOrdenar = False
-            valorEsMayor = context_game['cards_deck'][idCartaJugadorActual]['value'] > context_game['cards_deck'][idCartaJugadorSiguiente]['value']
-            if valorEsMayor:
-                seDebeOrdenar = True
-            else: # Si valor carta no es más alto, miramos si es igual
-                valorEsIgual = context_game['cards_deck'][idCartaJugadorActual]['value'] == context_game['cards_deck'][idCartaJugadorSiguiente]['value']
-                if valorEsIgual: # Si es igual, miramor la prioridad (marcada por el palo de la carta)
-                    prioridadPalo = context_game['cards_deck'][idCartaJugadorActual]['priority'] < context_game['cards_deck'][idCartaJugadorSiguiente]['priority']
-                    if prioridadPalo:
-                        seDebeOrdenar = True
+    # Asignar banca y prioridad a primer jugador lista ordenada
+    id_banca = context_game['game'][0]
+    players[id_banca]['bank'] = True
+    players[id_banca]['priority'] = len(context_game['game'])
 
-            if seDebeOrdenar:
-                tmp = context_game['game'][i + 1]
-                context_game['game'][i + 1] = context_game['game'][i]
-                context_game['game'][i] = tmp
+    # Asignar prioridad al resto de jugadores lista ordenada
+    priority = 1
+    for id in context_game['game'][1:]:
+        players[id]['priority'] = priority
+        priority += 1
 
 def resetPoints(players):
     '''Función que establece los 20 puntos iniciales en todos los jugadores.'''
@@ -689,12 +683,6 @@ def checkMinimun2PlayerWithPoints():
             if nPlayersWithPoints >= 2:
                 return True
     return False
-
-def orderAllPlayers():
-    '''Función que ordena los jugadores de la partida (contextGame[“game”]) de forma
-que pone la banca al principio y el resto de jugadores después, ordenados según
-prioridad'''
-    pass
 
 def setBets():
     '''Función que establece las apuestas de cada jugador en función del tipo de
@@ -897,10 +885,58 @@ def printStats(idPlayer="", titulo=""):
     print()
     _ = input(initialString + 'Enter to Continue')
 
-def orderPlayersByPriority(listaJugadores):
-    '''Ordenamos la lista de jugadores de la partida (contextGame[“game”]) según
-prioridad.'''
-    pass
+def orderAllPlayers():
+    '''Función que ordena los jugadores de la partida (contextGame[“game”]) de forma
+    que pone la banca al principio y el resto de jugadores después, ordenados según prioridad.
+
+    Es decir, se ordena la lista teniendo en cuenta sólo la carta inicial, y no quién es la banca.'''
+    # Ordenar lista utilizando método de la burbuja
+    for pasada in range(len(context_game['game']) - 1):
+        for i in range(len(context_game['game']) - pasada - 1):
+            # Comprobar que el número de la carta es mayor
+            idJugadorActual = context_game[i]
+            idCartaJugadorActual = players[idJugadorActual]['initialCard']
+            idJugadorSiguiente = context_game[i+1]
+            idCartaJugadorSiguiente = players[idJugadorSiguiente]['initialCard']
+
+            seDebeOrdenar = False
+            valorEsMayor = context_game['cards_deck'][idCartaJugadorActual]['value'] > context_game['cards_deck'][idCartaJugadorSiguiente]['value']
+            if valorEsMayor:
+                seDebeOrdenar = True
+            else: # Si valor carta no es más alto, miramos si es igual
+                valorEsIgual = context_game['cards_deck'][idCartaJugadorActual]['value'] == context_game['cards_deck'][idCartaJugadorSiguiente]['value']
+                if valorEsIgual: # Si es igual, miramor la prioridad (marcada por el palo de la carta)
+                    prioridadPalo = context_game['cards_deck'][idCartaJugadorActual]['priority'] < context_game['cards_deck'][idCartaJugadorSiguiente]['priority']
+                    if prioridadPalo:
+                        seDebeOrdenar = True
+
+            if seDebeOrdenar:
+                tmp = context_game['game'][i + 1]
+                context_game['game'][i + 1] = context_game['game'][i]
+                context_game['game'][i] = tmp
+
+def orderPlayersByPriority(listaJugadores=context_game):
+    '''Ordenamos la lista de jugadores de la partida (contextGame[“game”]) según prioridad.'''
+    # Ordenar lista utilizando método de la burbuja
+    for pasada in range(len(context_game['game']) - 1):
+        for i in range(len(context_game['game']) - pasada - 1):
+            # Comprobar que el valor de prioridad es más pequeño
+            idCurrentPlayer = context_game[i]
+            priorityCurrentPlayer = players[idCurrentPlayer]['priority']
+            idNextPlayer = context_game[i+1]
+            priorityNextPlayer = players[idNextPlayer]['priority']
+
+            isOrdered = False
+            currentPlayerHasPriority = priorityCurrentPlayer < priorityNextPlayer
+            if currentPlayerHasPriority:
+                isOrdered = True
+
+            # Si no están ordenados los pares de valores, se ordenan
+            if not isOrdered:
+                tmp = context_game['game'][i + 1]
+                context_game['game'][i + 1] = context_game['game'][i]
+                context_game['game'][i] = tmp
+    
 
 def printWinner():
     '''Función que muestra el ganador de la partida:'''

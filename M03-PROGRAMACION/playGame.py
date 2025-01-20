@@ -28,7 +28,7 @@ def playGame():
 
         # Crear una lista con los id’s de cartas (mazo):
         mazo = [] 
-        for card_id in context_game['cards_deck'].keys():
+        for card_id in listaJugadores['cards_deck'].keys():
             mazo.append(card_id)
 
         # Barajar el mazo:
@@ -38,7 +38,7 @@ def playGame():
         setBets()
 
         # Ejecutar jugadas de cada jugador:
-        for id in context_game['game']:
+        for id in listaJugadores['game']:
             playerIsHuman = players[id]['human']
             if playerIsHuman:
                 humanRound(id, mazo)
@@ -56,7 +56,7 @@ def playGame():
 
     # Rellenar variables para BBDD
     fill_cardgame(cardgame)
-    for id in context_game['game']: # Puede haber más de un jugador en partida si esta acaba por sobrepasar las rondas
+    for id in listaJugadores['game']: # Puede haber más de un jugador en partida si esta acaba por sobrepasar las rondas
         fill_player_game(player_game, playerID=id)
 
     # Insertar en BBDD los diccionarios creados para tal propósito:
@@ -69,7 +69,7 @@ def playGame():
 def removeDefeatedPlayers():
     '''Elimina a los jugadores sin puntos de la partida.'''
     playersToRemove = []
-    for id in context_game['game']:
+    for id in listaJugadores['game']:
         if players[id]['points'] == 0:
             playersToRemove.append(id)
     if len(playersToRemove) != 0:
@@ -77,7 +77,7 @@ def removeDefeatedPlayers():
             # Añadir jugador a player_game
             fill_player_game(player_game, playerID=id)
             # Borrar jugador de partida
-            context_game['game'].remove(id)
+            listaJugadores['game'].remove(id)
 
 def setNewBank(newBankCandidates):
     '''Se comprueba si hay una nueva banca entre los posibles candidatos. En caso
@@ -94,34 +94,34 @@ prioridades.'''
     random.shuffle(mazo)
 
     # Repartir una carta a cada jugador para decidir prioridades
-    for id in context_game['game']:
+    for id in listaJugadores['game']:
         players[id]['initialCard'] = mazo.pop[0]
         ###player_game[context_game['id_game']][id]['initial_card_id'] = mazo.pop[0]
 
     # Ordenar lista jugadores en función de carta inicial usando método de la burbuja
-    for pasada in range(len(context_game['game']) - 1):
-        for i in range(len(context_game['game']) - pasada - 1):
+    for pasada in range(len(listaJugadores['game']) - 1):
+        for i in range(len(listaJugadores['game']) - pasada - 1):
             # Comprobar que el número de la carta es mayor
-            idJugadorActual = context_game[i]
+            idJugadorActual = listaJugadores[i]
             idCartaJugadorActual = players[idJugadorActual]['initialCard']
-            idJugadorSiguiente = context_game[i+1]
+            idJugadorSiguiente = listaJugadores[i+1]
             idCartaJugadorSiguiente = players[idJugadorActual]['initialCard']
 
             seDebeOrdenar = False
-            valorEsMayor = context_game['cards_deck'][idCartaJugadorActual]['value'] > context_game['cards_deck'][idCartaJugadorSiguiente]['value']
+            valorEsMayor = listaJugadores['cards_deck'][idCartaJugadorActual]['value'] > listaJugadores['cards_deck'][idCartaJugadorSiguiente]['value']
             if valorEsMayor:
                 seDebeOrdenar = True
             else: # Si valor carta no es más alto, miramos si es igual
-                valorEsIgual = context_game['cards_deck'][idCartaJugadorActual]['value'] == context_game['cards_deck'][idCartaJugadorSiguiente]['value']
+                valorEsIgual = listaJugadores['cards_deck'][idCartaJugadorActual]['value'] == listaJugadores['cards_deck'][idCartaJugadorSiguiente]['value']
                 if valorEsIgual: # Si es igual, miramor la prioridad (marcada por el palo de la carta)
-                    prioridadPalo = context_game['cards_deck'][idCartaJugadorActual]['priority'] < context_game['cards_deck'][idCartaJugadorSiguiente]['priority']
+                    prioridadPalo = listaJugadores['cards_deck'][idCartaJugadorActual]['priority'] < listaJugadores['cards_deck'][idCartaJugadorSiguiente]['priority']
                     if prioridadPalo:
                         seDebeOrdenar = True
 
             if seDebeOrdenar:
-                tmp = context_game['game'][i + 1]
-                context_game['game'][i + 1] = context_game['game'][i]
-                context_game['game'][i] = tmp
+                tmp = listaJugadores['game'][i + 1]
+                listaJugadores['game'][i + 1] = listaJugadores['game'][i]
+                listaJugadores['game'][i] = tmp
 
 def resetPoints(players):
     '''Función que establece los 20 puntos iniciales en todos los jugadores.'''
@@ -131,8 +131,8 @@ def resetPoints(players):
 def generateBBDDvariables():
     '''Crea y devuelve los diccionarios: cardgame, player_game, player_game_round'''
     cardgame = {
-        'cardgame_id': context_game['id_game'],
-        'players': len(context_game['game']),
+        'cardgame_id': listaJugadores['id_game'],
+        'players': len(listaJugadores['game']),
         'start_hour': datetime.datetime.now(),
         'rounds': 0, # Esta variable se actualiza al final de la partida, con el valor de context_game['rounds']
         'end_hour': '' # Esta variable se actualiza al final de la partida, con el valor de datetime.datetime.now()
@@ -146,12 +146,12 @@ def generateBBDDvariables():
 
 def fill_cardgame(cardgame):
     '''Función para insertar datos en el diccionario cardgame'''
-    cardgame['rounds'] = context_game['rounds']
+    cardgame['rounds'] = listaJugadores['rounds']
     cardgame['end_hour'] = datetime.datetime.now()
 
 def fill_player_game(player_game,playerID):
     '''Función para insertar datos en el diccionario player_game'''
-    gameID = context_game['id_game']
+    gameID = listaJugadores['id_game']
     player_game[gameID]['initial_card_id'] = players[playerID]['initialCard']
     player_game[gameID]['starting_points'] = 20
     player_game[gameID]['ending_points'] = players[id]['points']
@@ -164,7 +164,7 @@ def fill_player_game_round(player_game_round,round,*fields):
 def checkMinimun2PlayerWithPoints():
     '''Función que verifica que al menos haya dos jugadores con puntos.'''
     nPlayersWithPoints = 0
-    for player_id in context_game['game']:
+    for player_id in listaJugadores['game']:
         if players[player_id]['points'] > 0:
             nPlayersWithPoints += 1
             if nPlayersWithPoints >= 2:
@@ -275,7 +275,7 @@ def orderCard(id, mazo):
         players[id]['cards'].append(idCarta)
 
         # Imprimir info por pantalla
-        nombreCarta = context_game['cards_deck']['literal']
+        nombreCarta = listaJugadores['cards_deck']['literal']
         print(initialString + f'The new card is {nombreCarta}')
         playerCardPoints = getPlayerCardPoints(id)
         print(initialString + f'Now you have {playerCardPoints} points')
@@ -286,7 +286,7 @@ def getPlayerCardPoints(id):
     '''Retorna los puntos de cartas de un jugador.'''
     playerCardPoints = 0
     for idCard in players[id]['cards']:
-        playerCardPoints += context_game['cards_deck']['value']
+        playerCardPoints += listaJugadores['cards_deck']['value']
     return playerCardPoints
 
 def distributionPointAndNewBankCandidates():
@@ -299,19 +299,19 @@ def printStats(idPlayer="", titulo=""):
     if titulo == '':
         print('~' * lineSize)
     else:
-        print(f' STATS AFTER ROUND {context_game['round'] }'.center(lineSize, '~'))
+        print(f' STATS AFTER ROUND {listaJugadores['round'] }'.center(lineSize, '~'))
     print()
     print(strGameStats)
     print()
     print('~' * lineSize)
     if idPlayer != '':
         playerName = players[idPlayer]['name']
-        print(f'Round {context_game['round']}, Turn of {playerName}'.center(lineSize, '~'))
+        print(f'Round {listaJugadores['round']}, Turn of {playerName}'.center(lineSize, '~'))
     print()
     for nombreClave in players[idPlayer]:
         line = ''
         line += nombreClave.ljust(20)
-        for id in context_game['game']:
+        for id in listaJugadores['game']:
             valorClave = players[id][nombreClave]
             line += f'{valorClave}'.ljust(40)
         print(line)
