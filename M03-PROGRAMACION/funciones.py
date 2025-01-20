@@ -700,6 +700,11 @@ jugador.'''
         else:
             players[player_id]['bet'] = puntos_apostados
 
+        # Si el jugador es banca, no puede apostar
+        playerIsBank = players[player_id]['bank']
+        if playerIsBank:
+            players[player_id]['bet'] = 0
+
 def bankOrderNewCard(id, mazo):
     '''Función que evalúa si la banca pedirá una nueva carta.'''
     pass
@@ -865,7 +870,7 @@ def getPlayerCardPoints(id):
 def distributionPointAndNewBankCandidates():
     '''Función que realiza el reparto de puntos una vez finalizada una ronda y devuelve
 una lista con los candidatos a la banca ( los que tienen 7,5)'''
-    pass
+    
 
 def printStats(idPlayer="", titulo=""):
     '''Imprime los stats de todos los jugadores de la partida.'''
