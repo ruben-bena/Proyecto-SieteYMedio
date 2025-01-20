@@ -131,10 +131,6 @@ def logToFile(text):
     f.close()'''
     pass
 
-def baknOrderNewCard(id, mazo):
-    '''Función que evalúa si la banca pedirá una nueva carta.'''
-    pass
-
 def newPlayer(dni, name, profile, human):
     '''Función que devuelve una tupla con dos elementos, el primero es el dni del nuevo
 jugador, el segundo, un diccionario con las claves: name, human, bank, initialCard,
@@ -346,11 +342,6 @@ def removeBBDDPlayer():
 seleccionemos'''
     pass
 
-def printStats(idPlayer="", titulo=""):
-    '''Esta función nos imprime los stats de todos los jugadores de la partida.
-    (Hay una foto en el PDF que muestra cómo debería quedar)'''
-    pass
-
 def reports():
     '''Función que nos muestra el menú de reportes, y una vez elegida una opción, el reporte
 correspondiente'''
@@ -558,6 +549,7 @@ def playGame():
                 humanRound(id, mazo)
             else:
                 standarRound(id, mazo)
+            printStats(id)
 
         # Repartir puntos:
         newBankCandidates = distributionPointAndNewBankCandidates()
@@ -713,10 +705,56 @@ jugador.'''
         puntos_apostados = math.floor(puntos_actuales * (perfil / 100)) # math.floor redondea a un número entero por abajo
         players[player_id]['bet'] = puntos_apostados
 
+def bankOrderNewCard(id, mazo):
+    '''Función que evalúa si la banca pedirá una nueva carta.'''
+    pass
+
+def checkBankWonRound(id):
+    '''Retorna True si la banca gana la ronda con sus cartas actuales.'''
+    pass
+
+def checkBankIsDefeated(id):
+    '''Retorna True si la banca pierde la partida (0 puntos) con sus cartas actuales.'''
+    pass
+
+def checkBankLosesRound(id):
+    '''Retorna True si la banca gana pierde la ronda contra TODOS los jugadores con sus cartas actuales.'''
+    pass
+
 def standarRound(id, mazo):
     '''Función que realiza la tirada de cartas de un jugador en función del tipo de
 jugador que es y teniendo en cuenta si el jugador es banca o no.'''
-    pass
+    playerIsBank = players[id]['bank']
+    playerProfile = players[id]['profile']
+
+    if playerIsBank:
+        while True:
+            bankWonRound = checkBankWonRound(id) # Banca ya ha ganado la ronda, sin necesitar más cartas
+            if bankWonRound:
+                break
+
+            bankOrdersCard = False
+            bankIsDefeated = checkBankIsDefeated(id) # Banca se queda sin puntos si no pide más cartas
+            bankLosesRound = checkBankLosesRound(id) # Banca no gana a ningún jugador esta ronda
+            if bankIsDefeated or bankLosesRound:
+                bankOrdersCard = True
+            # Comprobar si pide carta según perfil de riesgo
+            else:
+                chanceExceeding = chanceExceedingSevenAndHalf(id, mazo)
+                if chanceExceeding > playerProfile:
+                    break
+                else:
+                    idCarta = mazo.pop[0]
+                    players[id]['cards'].append(idCarta)
+
+    else:
+        while True:
+            chanceExceeding = chanceExceedingSevenAndHalf(id, mazo)
+            if chanceExceeding > playerProfile:
+                break
+            else:
+                idCarta = mazo.pop[0]
+                players[id]['cards'].append(idCarta)       
 
 def humanRound(id, mazo):
     '''Función que gestiona la tirada de un jugador humano. Nos muestra el menú de
