@@ -709,9 +709,16 @@ def bankOrderNewCard(id, mazo):
     '''Función que evalúa si la banca pedirá una nueva carta.'''
     pass
 
-def checkBankWonRound(id):
+def checkBankWonRound(bank_id):
     '''Retorna True si la banca gana la ronda con sus cartas actuales.'''
-    pass
+    bankRoundPoints = players[bank_id]['roundPoints']
+    for player_id in context_game['game']:
+        if player_id != bank_id:
+            playerRoundPoints = players[player_id]['roundPoints']
+            playerWinsToBank = (playerRoundPoints > bankRoundPoints) and (playerRoundPoints <= 7.5)
+            if playerWinsToBank:
+                return False
+    return True
 
 def checkBankIsDefeated(id):
     '''Retorna True si la banca pierde la partida (0 puntos) con sus cartas actuales.'''
