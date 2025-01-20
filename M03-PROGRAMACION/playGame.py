@@ -54,6 +54,11 @@ def playGame():
         # Establecer nueva banca si es necesario:
         setNewBank(newBankCandidates)
 
+    # Rellenar variables para BBDD
+    fill_cardgame(cardgame)
+    for id in context_game['game']: # Puede haber más de un jugador en partida si esta acaba por sobrepasar las rondas
+        fill_player_game(player_game, playerID=id)
+
     # Insertar en BBDD los diccionarios creados para tal propósito:
     '''TODO Aquí van las funciones relacionadas con inserción de datos en BBDD.'''
 
@@ -65,32 +70,14 @@ def removeDefeatedPlayers():
     '''Elimina a los jugadores sin puntos de la partida.'''
     playersToRemove = []
     for id in context_game['game']:
-        if players[id]['points'] <= 0:
+        if players[id]['points'] == 0:
             playersToRemove.append(id)
     if len(playersToRemove) != 0:
         for id in playersToRemove:
+            # Añadir jugador a player_game
+            fill_player_game(player_game, playerID=id)
+            # Borrar jugador de partida
             context_game['game'].remove(id)
-
-def generateBBDDvariables():
-    '''Crea y devuelve los diccionarios: cardgame, player_game, player_game_round'''
-    cardgame = {
-        'cardgame_id': context_game['id_game'],
-        'players': len(context_game['game']),
-        'start_hour': datetime.datetime.now(),
-        'rounds': 0, # Esta variable se actualiza al final de la partida, con el valor de context_game['rounds']
-        'end_hour': '' # Esta variable se actualiza al final de la partida, con el valor de datetime.datetime.now()
-    }
-
-    player_game = {}
-    id_game = context_game['id_game']
-    for id_player in context_game['game']:
-        player_game[id_game][id_player]['initial_card_id'] = players[id_player]['initialCard']
-        player_game[id_game][id_player]['starting_points'] = players[id_player]['points']
-        player_game[id_game][id_player]['ending_points'] = 0 # Esta variable se actualiza al final de la partida, con el valor de players[id_player]['points']
-
-    player_game_round = {}
-
-    return cardgame, player_game, player_game_round
 
 def setNewBank(newBankCandidates):
     '''Se comprueba si hay una nueva banca entre los posibles candidatos. En caso
@@ -141,9 +128,34 @@ def resetPoints(players):
     for player_id in players:
         players[player_id]['points'] = 20
 
-def fill_player_game(player_game,gameID,*fields):
+def generateBBDDvariables():
+    '''Crea y devuelve los diccionarios: cardgame, player_game, player_game_round'''
+    cardgame = {
+        'cardgame_id': context_game['id_game'],
+        'players': len(context_game['game']),
+        'start_hour': datetime.datetime.now(),
+        'rounds': 0, # Esta variable se actualiza al final de la partida, con el valor de context_game['rounds']
+        'end_hour': '' # Esta variable se actualiza al final de la partida, con el valor de datetime.datetime.now()
+    }
+
+    player_game = {}
+
+    player_game_round = {}
+
+    return cardgame, player_game, player_game_round
+
+def fill_cardgame(cardgame):
+    '''Función para insertar datos en el diccionario cardgame'''
+    cardgame['rounds'] = context_game['rounds']
+    cardgame['end_hour'] = datetime.datetime.now()
+
+def fill_player_game(player_game,playerID):
     '''Función para insertar datos en el diccionario player_game'''
-    pass
+    gameID = context_game['id_game']
+    player_game[gameID]['initial_card_id'] = players[playerID]['initialCard']
+    player_game[gameID]['starting_points'] = 20
+    player_game[gameID]['ending_points'] = players[id]['points']
+    
 
 def fill_player_game_round(player_game_round,round,*fields):
     '''Función para insertar datos en el diccionario player_game_round'''
