@@ -771,14 +771,15 @@ jugador que es y teniendo en cuenta si el jugador es banca o no.'''
             bankLosesRound = checkBankLosesRound(id) # Banca no gana a NINGÚN jugador esta ronda
             if bankIsDefeated or bankLosesRound:
                 bankOrdersCard = True
+
             # Comprobar si pide carta según perfil de riesgo
+            chanceExceeding = chanceExceedingSevenAndHalf(id, mazo)
+            bankCannotWin = players[id]['roundPoints'] > 7.5
+            if (chanceExceeding > playerProfile and not bankOrdersCard) or bankCannotWin:
+                break
             else:
-                chanceExceeding = chanceExceedingSevenAndHalf(id, mazo)
-                if chanceExceeding > playerProfile:
-                    break
-                else:
-                    idCarta = mazo.pop[0]
-                    players[id]['cards'].append(idCarta)
+                idCarta = mazo.pop[0]
+                players[id]['cards'].append(idCarta)
 
     else:
         while True:
