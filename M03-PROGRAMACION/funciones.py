@@ -3,6 +3,9 @@ import random
 import string
 import datetime
 import math
+import mysql.connector
+from mysql.connector import Error
+import pymysql
 
 from parametros import *
 from datos import *
@@ -465,9 +468,38 @@ def delBBDDPlayer(nif):
     '''Función que elimina un jugador de la BBDD'''
     pass
 
-def getGameId():
+def getGameID():
     '''Función que devuelve un id no existente en la tabla cardgame.'''
-    pass
+    try:
+        conn = pymysql.connect(
+            host='proyectosieteymedio.mysql.database.azure.com',
+            user='adminproyecto',
+            password='proyecto1234!',
+            database='siete_y_medio')
+        print("Connection established")
+
+        cursor = conn.cursor()
+        consulta = "SELECT MAX(game_id) FROM games;"
+        cursor.execute(consulta)
+        resultado = cursor.fetchone()
+
+        # Obtener el siguiente ID
+        max_id = resultado[0]  # Esto puede valer 'None' si no hay datos en la tabla de la BBDD
+        if max_id is None:
+            game_id = 1
+        else:
+            game_id = max_id + 1
+
+        # Cerrar cursor y conexión
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return game_id
+
+    except Exception as e:
+        print(f'Error al conectar con la BBDD en la función getGameId(): {e}')
+        return None
 
 def getBBDDRanking():
     '''Función que crea la vista player_earnings, y retorna un diccionario con los datos de
