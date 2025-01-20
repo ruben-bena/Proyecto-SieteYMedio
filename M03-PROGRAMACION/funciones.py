@@ -724,9 +724,16 @@ def checkBankIsDefeated(id):
     '''Retorna True si la banca pierde la partida (0 puntos) con sus cartas actuales.'''
     pass
 
-def checkBankLosesRound(id):
-    '''Retorna True si la banca gana pierde la ronda contra TODOS los jugadores con sus cartas actuales.'''
-    pass
+def checkBankLosesRound(bank_id):
+    '''Retorna True si la banca pierde la ronda contra TODOS los jugadores con sus cartas actuales.'''
+    bankRoundPoints = players[bank_id]['roundPoints']
+    for player_id in context_game['game']:
+        if player_id != bank_id:
+            playerRoundPoints = players[player_id]['roundPoints']
+            bankWinsToPlayer = (playerRoundPoints < bankRoundPoints) and (bankRoundPoints <= 7.5)
+            if bankWinsToPlayer:
+                return False
+    return True
 
 def standarRound(id, mazo):
     '''Función que realiza la tirada de cartas de un jugador en función del tipo de
