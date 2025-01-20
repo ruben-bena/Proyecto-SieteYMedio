@@ -17,7 +17,8 @@ Como datos, un nuevo diccionario, donde tenemos el nombre literal de la carta, e
 valor de la carta, el valor de la carta en el juego y la prioridad ( oros 4, copas 3,
 espadas 2, bastos 1).
 La prioridad nos da la opción de desempatar cartas que tienen el mismo valor.
-Este diccionario nos servirá para todo lo relacionado con las cartas.'''
+Este diccionario nos servirá para todo lo relacionado con las cartas.
+'''
 
 players = {}
 '''
