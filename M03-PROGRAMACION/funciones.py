@@ -693,7 +693,12 @@ jugador.'''
         puntos_actuales = players[player_id]['points']
         perfil = players[player_id]['profile']
         puntos_apostados = math.floor(puntos_actuales * (perfil / 100)) # math.floor redondea a un número entero por abajo
-        players[player_id]['bet'] = puntos_apostados
+        
+        # Si el jugador tiene pocos puntos y puntos_apostados le da 0, que apueste como mínimo 1 punto
+        if puntos_apostados == 0:
+            players[player_id]['bet'] = 1
+        else:
+            players[player_id]['bet'] = puntos_apostados
 
 def bankOrderNewCard(id, mazo):
     '''Función que evalúa si la banca pedirá una nueva carta.'''
