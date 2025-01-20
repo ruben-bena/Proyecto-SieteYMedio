@@ -7,25 +7,7 @@ from datos import *
 def playGame():
     '''Esta es la función principal del proyecto. Una vez establecido el número de rondas, la
     baraja con la que se va a jugar, y los jugadores que participan en la partida, ésta será
-    la función que gestione toda la partida. Para ello, hará uso de otras funciones.
-    
-    Una posible estrategia para esta función sería:
-    Establecer prioridades de los jugadores
-    Resetear puntos
-    Crear diccionarios cardgame,player_game,player_game_round
-    Crear un id de partida
-    Mientras hayan dos jugadores o más con puntos, y no nos pasemos del máximo de
-    rondas:
-        ordenar jugadores, banca al final y resto de prioridad menor a mayor.
-        Crear una lista con los id’s de cartas ( mazo).
-        Barajar el mazo.
-        Establecer apuestas
-        Ejecutar jugadas de cada jugador.
-        Repartir puntos.
-        Eliminar los jugadores sin puntos.
-        Establecer nueva banca si es necesario.
-        Insertar en BBDD los diccionarios creados para tal propósito.
-        Mostrar el ganador.'''
+    la función que gestione toda la partida. Para ello, hará uso de otras funciones.'''
     # Establecer prioridades de los jugadores:
     setGamePriority(mazo)
 
@@ -36,7 +18,7 @@ def playGame():
     cardgame, player_game, player_game_round = generateBBDDvariables() # Crear diccionarios cardgame,player_game,player_game_round
 
     # Crear un id de partida
-    gameId = getGameId()
+    game_id = getGameId()
 
     # Mientras hayan dos jugadores o más con puntos, y no nos pasemos del máximo de rondas:
     while checkMinimun2PlayerWithPoints():
@@ -46,8 +28,8 @@ def playGame():
 
         # Crear una lista con los id’s de cartas (mazo):
         mazo = [] 
-        for cardId in context_game['cards_deck'].keys():
-            mazo.append(cardId)
+        for card_id in context_game['cards_deck'].keys():
+            mazo.append(card_id)
 
         # Barajar el mazo:
         random.shuffle(mazo)
@@ -67,13 +49,7 @@ def playGame():
         newBankCandidates = distributionPointAndNewBankCandidates()
 
         # Eliminar los jugadores sin puntos:
-        playersToRemove = []
-        for id in context_game['game']:
-            if players[id]['points'] <= 0:
-                playersToRemove.append(id)
-        if len(playersToRemove) != 0:
-            for id in playersToRemove:
-                context_game['game'].remove(id)
+        removeDefeatedPlayers()
 
         # Establecer nueva banca si es necesario:
         setNewBank(newBankCandidates)
@@ -84,6 +60,16 @@ def playGame():
     # Mostrar el ganador:
     printWinner()
     '''TODO Al acabar la partida, devolver jugador al menú principal.'''
+
+def removeDefeatedPlayers():
+    '''Elimina a los jugadores sin puntos de la partida.'''
+    playersToRemove = []
+    for id in context_game['game']:
+        if players[id]['points'] <= 0:
+            playersToRemove.append(id)
+    if len(playersToRemove) != 0:
+        for id in playersToRemove:
+            context_game['game'].remove(id)
 
 def generateBBDDvariables():
     '''Crea y devuelve los diccionarios: cardgame, player_game, player_game_round'''
