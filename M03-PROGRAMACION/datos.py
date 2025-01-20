@@ -125,7 +125,7 @@ player_game_round = {
         id_player_1: {
             is_bank:”0 ó 1”,
             bet_points:”apuesta en la ronda”,
-            starting_round_points:”puntos al inicio de la partida,
+            starting_round_points:”puntos al inicio de la ronda,
             cards_value:”puntos obtenido en la actual ronda”,
             endind_round_points:”puntos al final de la ronda”
         }
@@ -133,7 +133,7 @@ player_game_round = {
         id_player_n: {
             is_bank:”0 ó 1”,
             bet_points:”apuesta en la ronda”,
-            starting_round_points:”puntos al inicio de la partida,
+            starting_round_points:”puntos al inicio de la ronda,
             cards_value:”puntos obtenido en la actual ronda”,
             endind_round_points:”puntos al final de la ronda”
         }

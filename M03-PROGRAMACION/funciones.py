@@ -670,9 +670,13 @@ def fill_player_game(player_game,playerID):
     player_game[gameID]['ending_points'] = players[id]['points']
     
 
-def fill_player_game_round(player_game_round,round,*fields):
+def fill_player_game_round(player_game_round,round,playerID):
     '''Función para insertar datos en el diccionario player_game_round'''
-    pass
+    player_game_round[round][playerID]['is_bank'] = players[playerID]['bank']
+    player_game_round[round][playerID]['bet_points'] = players[playerID]['bet']
+    player_game_round[round][playerID]['starting_round_points'] = players[playerID]['points'] - players[playerID]['roundPoints']
+    player_game_round[round][playerID]['cards_value'] = getPlayerCardPoints(playerID)
+    player_game_round[round][playerID]['ending_round_points'] = players[playerID]['points']
 
 def checkMinimun2PlayerWithPoints():
     '''Función que verifica que al menos haya dos jugadores con puntos.'''
@@ -764,7 +768,7 @@ Y ejecuta la acción que elijamos'''
     elif userInput == 5:
         standarRound(id, mazo)
     elif userInput == 6:
-        pass
+        fill_player_game_round(player_game_round, round=context_game['round'], playerID=id)
     
 def orderCard(id, mazo):
     '''Pide una carta al jugador.'''
