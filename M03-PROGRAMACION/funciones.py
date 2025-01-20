@@ -610,7 +610,6 @@ prioridades.'''
     # Repartir una carta a cada jugador para decidir prioridades
     for id in context_game['game']:
         players[id]['initialCard'] = mazo.pop[0]
-        ###player_game[context_game['id_game']][id]['initial_card_id'] = mazo.pop[0]
 
     # Ordenar lista jugadores en función de carta inicial usando método de la burbuja
     for pasada in range(len(context_game['game']) - 1):
