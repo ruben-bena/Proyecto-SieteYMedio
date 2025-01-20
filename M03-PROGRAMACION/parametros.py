@@ -2,6 +2,58 @@ lineSize = 140
 lineStart = lineSize // 2 - 10
 initialString = ' ' * lineStart
 
+# Variables para pruebas:
+players = {
+    '11111111A': {
+        'name': 'pepe',
+        'human': True,
+        'bank': '',
+        'initialCard': '',
+        'priority': 0,
+        'profile': 40,
+        'bet': 0,
+        'points': 0,
+        'cards': [],
+        'roundPoints': 0
+    },
+    '22222222B': {
+        'name': 'luis',
+        'human': True,
+        'bank': '',
+        'initialCard': '',
+        'priority': 0,
+        'profile': 30,
+        'bet': 0,
+        'points': 0,
+        'cards': [],
+        'roundPoints': 0
+    },
+    '33333333C': {
+        'name': 'bot1',
+        'human': False,
+        'bank': '',
+        'initialCard': '',
+        'priority': 0,
+        'profile': 50,
+        'bet': 0,
+        'points': 0,
+        'cards': [],
+        'roundPoints': 0
+    },
+    '44444444D': {
+        'name': 'bot2',
+        'human': False,
+        'bank': '',
+        'initialCard': '',
+        'priority': 0,
+        'profile': 30,
+        'bet': 0,
+        'points': 0,
+        'cards': [],
+        'roundPoints': 0
+    },
+}
+
 # Página para generar ASCII: https://patorjk.com/software/taag/#p=display&f=Big%20Money-ne&t=Type%20Something%20
 strSevenAndHalf = '''
   /$$$$$$                                                                          /$$       /$$   /$$           /$$  /$$$$$$ 

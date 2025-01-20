@@ -1,6 +1,6 @@
 from parametros import *
 from datos import *
-from playGame import *
+#from playGame import *
 from funciones import *
 
 def main():

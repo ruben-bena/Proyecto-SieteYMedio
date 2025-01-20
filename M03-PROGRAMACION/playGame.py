@@ -14,11 +14,11 @@ def playGame():
     # Resetear puntos:
     resetPoints(players)
 
-    # Crear diccionarios cardgame,player_game,player_game_round:
-    cardgame, player_game, player_game_round = generateBBDDvariables() # Crear diccionarios cardgame,player_game,player_game_round
-
     # Crear un id de partida
     game_id = getGameId()
+
+    # Crear diccionarios cardgame,player_game,player_game_round:
+    cardgame, player_game, player_game_round = generateBBDDvariables() # Crear diccionarios cardgame,player_game,player_game_round
 
     # Mientras hayan dos jugadores o más con puntos, y no nos pasemos del máximo de rondas:
     while checkMinimun2PlayerWithPoints():
