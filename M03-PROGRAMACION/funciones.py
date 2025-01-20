@@ -573,6 +573,8 @@ def playGame():
 
     # Mostrar el ganador:
     printWinner()
+
+    # Volver al menú principal de juego
     '''TODO Al acabar la partida, devolver jugador al menú principal.'''
 
 def removeDefeatedPlayers():
@@ -879,7 +881,11 @@ def printStats(idPlayer="", titulo=""):
         line = ''
         line += nombreClave.ljust(20)
         for id in context_game['game']:
-            valorClave = players[id][nombreClave]
+            # Si miramos la clave 'cards', hacemos una variación ya que estamos mirando una lista y no un único valor
+            if nombreClave == 'cards':
+                valorClave = ','.join(players[id][nombreClave])
+            else:
+                valorClave = players[id][nombreClave]
             line += f'{valorClave}'.ljust(40)
         print(line)
     print()
