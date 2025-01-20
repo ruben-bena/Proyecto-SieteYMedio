@@ -788,7 +788,21 @@ jugador que es y teniendo en cuenta si el jugador es banca o no.'''
                 break
             else:
                 idCarta = mazo.pop[0]
-                players[id]['cards'].append(idCarta)       
+                players[id]['cards'].append(idCarta)   
+
+def setPlayerBet(id):
+    '''Pide al jugador un valor de apuesta. Si el valor es válido, lo asigna.'''
+    playerIsBank = players[id]['bank']
+    if playerIsBank:
+        print(initialString + 'Bank cannot bet points!')
+        _ = input(initialString + 'Enter to Continue')
+    else:
+        validInputsBet = []
+        maxBet = min(20, players[id]['points'])
+        for n in range(1, maxBet + 1):
+            validInputsBet.append(n)
+        bet = getOpt(strSevenAndHalf, rangeList=validInputsBet, inputName='Set the new Bet', errorName='The New Bet has to be a number between 1 and  20')
+        players[id]['bet'] = bet
 
 def humanRound(id, mazo):
     '''Función que gestiona la tirada de un jugador humano. Nos muestra el menú de
@@ -817,11 +831,7 @@ Y ejecuta la acción que elijamos'''
     elif userInput == 2:
         printStats(id, strSevenAndHalf)
     elif userInput == 3:
-        validInputsBet = []
-        for n in range(1,21):
-            validInputsBet.append(n)
-        bet = getOpt(strSevenAndHalf, rangeList=validInputsBet, inputName='Set the new Bet', errorName='The New Bet has to be a number between 1 and  20')
-        players[id]['bet'] = bet
+        setPlayerBet(id)
         humanRound(id, mazo)
     elif userInput == 4:
         orderCard(id, mazo)
