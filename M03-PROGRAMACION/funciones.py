@@ -503,11 +503,6 @@ función getBBDDRanking(), ordenados según la opción del ranking elegida'''
 #endregion funciones
 
 #region playGame
-import random
-import datetime
-from funciones import *
-from parametros import *
-from datos import *
 
 def playGame():
     '''Esta es la función principal del proyecto. Una vez establecido el número de rondas, la
