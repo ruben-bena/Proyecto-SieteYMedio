@@ -535,7 +535,7 @@ def playGame():
     cardgame, player_game, player_game_round = generateBBDDvariables() # Crear diccionarios cardgame,player_game,player_game_round
 
     # Mientras hayan dos jugadores o más con puntos, y no nos pasemos del máximo de rondas:
-    while checkMinimun2PlayerWithPoints():
+    while checkMinimun2PlayerWithPoints() and checkRounds():
 
         # ordenar jugadores, banca al final y resto de prioridad menor a mayor:
         orderPlayersByPriority()
@@ -681,6 +681,12 @@ def fill_player_game_round(player_game_round,round,playerID):
     player_game_round[round][playerID]['starting_round_points'] = starting_points
     player_game_round[round][playerID]['cards_value'] = getPlayerCardPoints(playerID)
     player_game_round[round][playerID]['ending_round_points'] = players[playerID]['points']
+
+def checkRounds():
+    '''Retorna True si no hemos sobrepasado el máximo de rondas de la partida.'''
+    if context_game['round'] < context_game['maxRounds']:
+        return True
+    return False
 
 def checkMinimun2PlayerWithPoints():
     '''Función que verifica que al menos haya dos jugadores con puntos.'''
