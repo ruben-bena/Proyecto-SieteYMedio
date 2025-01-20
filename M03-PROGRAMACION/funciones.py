@@ -695,9 +695,14 @@ def resetPoints(players):
 
 def generateBBDDvariables():
     '''Crea y devuelve los diccionarios: cardgame, player_game, player_game_round'''
+    if len(context_game['cards_deck']) == 48:
+        deck_id = 'ESP'
+    else:
+        deck_id = 'POKER'
     cardgame = {
         'cardgame_id': context_game['id_game'],
         'players': len(context_game['game']),
+        'deck_id': deck_id,
         'start_hour': datetime.datetime.now(),
         'rounds': 0, # Esta variable se actualiza al final de la partida, con el valor de context_game['rounds']
         'end_hour': '' # Esta variable se actualiza al final de la partida, con el valor de datetime.datetime.now()
