@@ -10,7 +10,6 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema siete_y_medio
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `siete_y_medio` ;
 
 -- -----------------------------------------------------
 -- Schema siete_y_medio
@@ -51,15 +50,14 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `siete_y_medio`.`players`
+-- Table `siete_y_medio`.`game_players`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `siete_y_medio`.`players` (
+CREATE TABLE IF NOT EXISTS `siete_y_medio`.`game_players` (
+  `game_players_id` VARCHAR(45) NOT NULL,
+  `game_id` INT UNSIGNED NOT NULL,
   `player_id` INT UNSIGNED NOT NULL,
-  `name` VARCHAR(45) NOT NULL,
-  `is_ai` BIT(1) NOT NULL,
-  `risk_level` INT UNSIGNED NULL,
-  PRIMARY KEY (`player_id`),
-  UNIQUE INDEX `nombre_UNIQUE` (`name` ASC) VISIBLE)
+  PRIMARY KEY (`game_players_id`),
+  INDEX `idx_game_id_player_id` (`game_id` ASC, `player_id` ASC) VISIBLE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -86,22 +84,15 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `siete_y_medio`.`game_players`
+-- Table `siete_y_medio`.`players`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `siete_y_medio`.`game_players` (
-  `game_players_id` VARCHAR(45) NOT NULL,
-  `game_id` INT UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `siete_y_medio`.`players` (
   `player_id` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`game_players_id`),
-  INDEX `fk_game_players_game_idx` (`game_id` ASC) VISIBLE,
-  INDEX `fk_game_players_player_idx` (`player_id` ASC) VISIBLE,
-  INDEX `idx_game_id_player_id` (`game_id` ASC, `player_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Game_has_players_players1`
-    FOREIGN KEY (`player_id`)
-    REFERENCES `siete_y_medio`.`players` (`player_id`),
-  CONSTRAINT `fk_Games_has_players_games1`
-    FOREIGN KEY (`game_id`)
-    REFERENCES `siete_y_medio`.`games` (`game_id`))
+  `name` VARCHAR(45) NOT NULL,
+  `is_ai` BIT(1) NOT NULL,
+  `risk_level` INT UNSIGNED NULL DEFAULT NULL,
+  PRIMARY KEY (`player_id`),
+  UNIQUE INDEX `nombre_UNIQUE` (`name` ASC) VISIBLE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -111,7 +102,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `siete_y_medio`.`rounds`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `siete_y_medio`.`rounds` (
-  `round_id` INT UNSIGNED NOT NULL,
+  `delete_id` INT UNSIGNED NOT NULL,
   `game_id` INT UNSIGNED NOT NULL,
   `round_number` INT UNSIGNED NOT NULL,
   `player_id` INT UNSIGNED NOT NULL,
@@ -119,11 +110,45 @@ CREATE TABLE IF NOT EXISTS `siete_y_medio`.`rounds` (
   `player_end_points` INT NOT NULL,
   `player_bet` INT NULL DEFAULT NULL,
   `player_bank` BIT(1) NOT NULL,
-  PRIMARY KEY (`round_id`),
+  PRIMARY KEY (`delete_id`),
   INDEX `fk_Rounds_games_players_idx` (`player_id` ASC, `game_id` ASC) VISIBLE,
   CONSTRAINT `fk_Rounds_games_players1`
     FOREIGN KEY (`player_id` , `game_id`)
     REFERENCES `siete_y_medio`.`game_players` (`game_id` , `player_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `siete_y_medio`.`rounds_players`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `siete_y_medio`.`rounds_players` (
+  `round_id` VARCHAR(45) NOT NULL,
+  `game_id` INT UNSIGNED NOT NULL,
+  `round_number` INT UNSIGNED NOT NULL,
+  `player_id` INT UNSIGNED NOT NULL,
+  `first_cart_in_hand` VARCHAR(45) NOT NULL,
+  `player_start_points` INT NOT NULL,
+  `player_end_points` INT NOT NULL,
+  `player_bet` INT NULL DEFAULT NULL,
+  `player_bank` BIT(1) NOT NULL,
+  PRIMARY KEY (`round_id`),
+  INDEX `fk_game_players_game_idx` (`game_id` ASC) VISIBLE,
+  INDEX `fk_game_players_player_idx` (`player_id` ASC) VISIBLE,
+  INDEX `idx_game_id_player_id` (`game_id` ASC, `player_id` ASC) VISIBLE,
+  INDEX `fk_rounds_players_first_cart_in_hand_idx` (`first_cart_in_hand` ASC) VISIBLE,
+  CONSTRAINT `fk_Rounds_players_games1`
+    FOREIGN KEY (`game_id`)
+    REFERENCES `siete_y_medio`.`games` (`game_id`),
+  CONSTRAINT `fk_Rounds_players_players1`
+    FOREIGN KEY (`player_id`)
+    REFERENCES `siete_y_medio`.`players` (`player_id`),
+  CONSTRAINT `fk_rounds_players_first_cart_in_hand`
+    FOREIGN KEY (`first_cart_in_hand`)
+    REFERENCES `siete_y_medio`.`cards` (`card_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
