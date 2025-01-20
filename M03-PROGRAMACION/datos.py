@@ -69,42 +69,72 @@ mazo = []
 context_game = {}
 '''Contiene una serie de variables de contexto a las que podamos acceder desde cualquier sitio:
 
-context_game['game'] = list (jugadores en la partida actual).
-context_game['round'] = int (ronda actual de la partida).
+context_game['game'] = list (id de jugadores en la partida actual).
+context_game['round'] = int (ronda actual de la partida, la primera es la 0).
 context_game['id_game'] = str (representa el id de la partida actual).
 context_game['maxRounds'] = int (represente el número máximo de rondas en la partida).
 context_game['cards_deck'] = dict (representa lo mismo que haría la variable 'cartas').
 
 Tal y como indica su nombre, este diccionario nos será de utilidad para tener, de
-forma ordenada, variables que pueden ser de tipo global.'''
+forma ordenada, variables que pueden ser de tipo global.
+'''
 
 
 
-'''Algunas sugerencias:
+'''
+Algunas sugerencias:
 Para la inserción de datos en BBDD, sería conveniente crear un diccionario para cada
 una de las tablas que tengamos que actualizar durante el juego
 '''
 
 cardgame = {}
 '''
-cardgame = {'cardgame_id': id de partida, 'players': Numero de jugadores,
-'start_hour':Hora de inicio de artida ( datetime), 'rounds': Número de rondas,
-'end_hour': hora final de partida ( datetime) }
+cardgame = {
+    'cardgame_id': id de partida,
+    'players': Numero de jugadores,
+    'start_hour':Hora de inicio de artida ( datetime),
+    'rounds': Número de rondas,
+    'end_hour': hora final de partida ( datetime)
+}
 '''
 
 player_game = {}
 '''
-player_game = {id_game:{id_player_1:{initial_card_id:”card id”, starting_points:”puntos
-al inicio”, ending_points:”puntos al final de partida},…,id_player_n:
-{initial_card_id:”card id”, starting_points:”puntos al inicio”, ending_points:”puntos al
-final de partida}}”
+player_game = {
+    id_game: {
+        id_player_1: {
+            initial_card_id:”card id”,
+            starting_points:”puntos al inicio”,
+            ending_points:”puntos al final de partida
+        }
+        ,…,
+        id_player_n: {
+            initial_card_id:”card id”,
+            starting_points:”puntos al inicio”,
+            ending_points: ”puntos al final de partida"
+        }
+    }
+}
 '''
 
 player_game_round = {}
 '''
-player_game_round = {round:{id_player_1:{is_bank:”0 ó 1”,bet_points:”apuesta en la
-ronda”,starting_round_points:”puntos al inicio de la partida,cards_value:”puntos
-obtenido en la actual ronda”,endind_round_points:”puntos al final de la ronda”},…,
-{id_player_n:{is_bank:”0 ó 1”,bet_points:”apuesta en la
-ronda”,starting_round_points:”puntos al inicio de la partida,cards_value:”puntos
-obtenido en la actual ronda”,endind_round_points:”puntos al final de la ronda”}'''
+player_game_round = {
+    round: {
+        id_player_1: {
+            is_bank:”0 ó 1”,
+            bet_points:”apuesta en la ronda”,
+            starting_round_points:”puntos al inicio de la partida,
+            cards_value:”puntos obtenido en la actual ronda”,
+            endind_round_points:”puntos al final de la ronda”
+        }
+        ,…,
+        id_player_n: {
+            is_bank:”0 ó 1”,
+            bet_points:”apuesta en la ronda”,
+            starting_round_points:”puntos al inicio de la partida,
+            cards_value:”puntos obtenido en la actual ronda”,
+            endind_round_points:”puntos al final de la ronda”
+        }
+}
+'''

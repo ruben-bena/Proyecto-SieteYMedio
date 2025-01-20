@@ -1,4 +1,5 @@
 import random
+import datetime
 from funciones import *
 from parametros import *
 from datos import *
@@ -86,7 +87,24 @@ def playGame():
 
 def generateBBDDvariables():
     '''Crea y devuelve los diccionarios: cardgame, player_game, player_game_round'''
-    pass
+    cardgame = {
+        'cardgame_id': context_game['id_game'],
+        'players': len(context_game['game']),
+        'start_hour': datetime.datetime.now(),
+        'rounds': 0, # Esta variable se actualiza al final de la partida, con el valor de context_game['rounds']
+        'end_hour': '' # Esta variable se actualiza al final de la partida, con el valor de datetime.datetime.now()
+    }
+
+    player_game = {}
+    id_game = context_game['id_game']
+    for id_player in context_game['game']:
+        player_game[id_game][id_player]['initial_card_id'] = players[id_player]['initialCard']
+        player_game[id_game][id_player]['starting_points'] = players[id_player]['points']
+        player_game[id_game][id_player]['ending_points'] = 0 # Esta variable se actualiza al final de la partida, con el valor de players[id_player]['points']
+
+    player_game_round = {}
+
+    return cardgame, player_game, player_game_round
 
 def setNewBank(newBankCandidates):
     '''Se comprueba si hay una nueva banca entre los posibles candidatos. En caso
@@ -229,7 +247,7 @@ Y ejecuta la acción que elijamos'''
     elif userInput == 5:
         standarRound(id, mazo)
     elif userInput == 6:
-        endTurn()
+        pass
     
 def orderCard(id, mazo):
     '''Pide una carta al jugador.'''
