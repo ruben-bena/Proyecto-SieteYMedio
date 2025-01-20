@@ -33,7 +33,7 @@ players = {
         'bet': int,
         'points': int (empieza la partida con 20),
         'cards': list (contiene los ids de las cartas, que son str cada uno),
-        'roundPoints': int (incremento de puntos de la ronda)
+        'roundPoints': floar (puntos de las cartas)
     },
     'id_jugador2: {
         ...
