@@ -4,6 +4,8 @@ from datos import *
 from funciones import *
 
 def main():
+    context_game['game'] = []
+    context_game['cards_deck'] = {}
     mainMenu()
 
 if __name__ == '__main__':

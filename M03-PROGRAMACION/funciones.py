@@ -32,22 +32,36 @@ def mainMenu():
         '5) Reports',
         '6) Exit')
     validInputsMainMenu = (1,2,3,4,5,6)
-    
-    userInput = getOpt(strSevenAndHalf, inputOptMainMenu, validInputsMainMenu)
-        
-    if userInput == 1:
-        addRemovePlayers()
-    elif userInput == 2:
-        settings()
-    elif userInput == 3:
-        # TODO Poner condiciones necesarias para que el juego pueda comenzar (2 jugadores min, elegir baraja...)
-        playGame()
-    elif userInput == 4:
-        ranking()
-    elif userInput == 5:
-        reports()
-    elif userInput == 6:
-        quit
+
+    while True:
+        userInput = getOpt(strSevenAndHalf, inputOptMainMenu, validInputsMainMenu)
+
+        if userInput == 1:
+            addRemovePlayers()
+        elif userInput == 2:
+            settings()
+        elif userInput == 3:
+            # TODO Poner condiciones necesarias para que el juego pueda comenzar (2 jugadores min, elegir baraja...)
+            if gameCanStart():
+                playGame()
+            else:
+                print(initialString + 'Cannot start game yet! Need at least 2 players and one deck selected.')
+        elif userInput == 4:
+            ranking()
+        elif userInput == 5:
+            reports()
+        elif userInput == 6:
+            break
+
+def gameCanStart():
+    '''Retorna True si se cumplen las condiciones para que comience la partida:
+    - Al menos 2 jugadores
+    - Mazo de cartas seleccionado'''
+    atLeast2Players = (len(context_game['game']) >= 2)
+    deckIsSelected = (len(context_game['cards_deck']) > 0)
+    if atLeast2Players and deckIsSelected:
+        return True
+    return False
 
 def getOpt(textOpts="", inputOptText=[], rangeList=[], inputName='', errorName='', playerId=''):
     '''Función para la gestión de menús.
@@ -540,6 +554,11 @@ def playGame():
     '''Esta es la función principal del proyecto. Una vez establecido el número de rondas, la
     baraja con la que se va a jugar, y los jugadores que participan en la partida, ésta será
     la función que gestione toda la partida. Para ello, hará uso de otras funciones.'''
+    # Crear una lista con los id’s de cartas (mazo):
+    mazo = []
+    for card_id in context_game['cards_deck'].keys():
+        mazo.append(card_id)
+
     # Establecer prioridades iniciales de los jugadores:
     setGamePriority(mazo)
 
@@ -547,7 +566,8 @@ def playGame():
     resetPoints(players)
 
     # Crear un id de partida
-    game_id = getGameId()
+    game_id = getGameID()
+    context_game['id_game'] = game_id
 
     # Crear diccionarios cardgame,player_game,player_game_round:
     cardgame, player_game, player_game_round = generateBBDDvariables() # Crear diccionarios cardgame,player_game,player_game_round
