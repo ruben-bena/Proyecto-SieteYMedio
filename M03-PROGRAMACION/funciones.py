@@ -643,7 +643,7 @@ def playGame():
     while checkMinimun2PlayerWithPoints() and checkRounds():
 
         # Establecer prioridad de los jugadores, SIN DAR CARTA INICIAL
-        setGamePriority(mazo, giveInitialCard=False)
+        setGamePriority(mazo, giveInitialCard=False, setBank=False)
 
         # ordenar jugadores, banca al final y resto de prioridad menor a mayor:
         orderPlayersByPriority()
@@ -727,13 +727,12 @@ def setNewBank(newBankCandidates):
     new_bank_id = getHighestPriorityID(playerList=newBankCandidates)
     players[new_bank_id]['bank'] = True
 
-def setGamePriority(mazo, giveInitialCard=True):
+def setGamePriority(mazo, giveInitialCard=True, setBank=True):
     '''Esta función establece las prioridades de los jugadores.
     Se recibe una lista con los id’s de la baraja (mazo), se mezclan, se reparte una
     carta a cada jugador, se ordenan la lista de jugadores de la partida
     (contextGame[“game”]) según la carta que han recibido, y se establecen las
     prioridades.'''
-    
     if giveInitialCard:
         # Mezclar el mazo
         random.shuffle(mazo)
@@ -745,9 +744,13 @@ def setGamePriority(mazo, giveInitialCard=True):
     # Ordenar lista jugadores en función de carta inicial usando método de la burbuja
     orderAllPlayers()
 
-    # Asignar banca y prioridad a primer jugador lista ordenada
-    id_banca = context_game['game'][0]
-    players[id_banca]['bank'] = True
+    # Asignar banca y prioridad a primer jugador lista ordenada (si es necesario)
+    if setBank:
+        id_banca = context_game['game'][0]
+        players[id_banca]['bank'] = True
+    else:
+        id_banca = getBankId()
+    
     players[id_banca]['priority'] = len(context_game['game'])
 
     # Asignar prioridad al resto de jugadores lista ordenada
