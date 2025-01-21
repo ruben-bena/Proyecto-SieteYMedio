@@ -382,6 +382,35 @@ def insertBBDD_player(player_id, name, is_ai, risk_level):
 
 def loadBBDD_players():
     '''Carga los jugadores de la BBDD en la variable 'players'.'''
+    try:
+        conn = pymysql.connect(
+            host='proyectosieteymedio.mysql.database.azure.com',
+            user='adminproyecto',
+            password='proyecto1234!',
+            database='siete_y_medio')
+        
+        cursor = conn.cursor()
+        consulta = "SELECT player_id, name, is_ai, risk_level FROM players;"
+        cursor.execute(consulta)
+        resultados = cursor.fetchall()
+
+        # Crear diccionario de players
+        players = {}
+        for fila in resultados:
+            player = newPlayer(dni=fila['player_id'], name=fila['name'], profile=fila['risk_level'], human=not bool(fila['is_ai']))
+            players[player[0]] = player[1]
+
+        # Cerrar cursor y conexión
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return players
+
+    except Exception as e:
+        print(f'Error al conectar con la BBDD en la función loadBBDD_players(): {e}')
+        _ = input('Enter to Continue')
+        return None
 
 def showPlayersGame():
     '''Función que muestra los jugadores seleccionados cuando estamos añadiendo
