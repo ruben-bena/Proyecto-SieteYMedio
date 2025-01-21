@@ -186,16 +186,17 @@ Option:'''
         '4) Go back')
     validInputsAddRemovePlayers = (1,2,3,4)
     
-    userInput = getOpt(strAddRemovePlayers, inputOptAddRemovePlayers, validInputsAddRemovePlayers)
+    while True:
+        userInput = getOpt(strAddRemovePlayers, inputOptAddRemovePlayers, validInputsAddRemovePlayers)
 
-    if userInput == 1:
-        setNewPlayer()
-    elif userInput == 2:
-        setNewPlayer(False)
-    elif userInput == 3:
-        removeBBDDPlayer()
-    elif userInput == 4:
-        mainMenu()
+        if userInput == 1:
+            setNewPlayer()
+        elif userInput == 2:
+            setNewPlayer(False)
+        elif userInput == 3:
+            removeBBDDPlayer()
+        elif userInput == 4:
+            mainMenu()
 
 def settings():
     '''Función que gestiona el menú settings, donde podemos establecer los jugadores que
@@ -344,12 +345,43 @@ def setNewPlayer(human=True):
     )
     userInput = getOpt(strNewPlayer, inputOptPlayerData, rangeList=['y','Y','n','N'], inputName='Is ok? Y/n')
     if userInput.lower() == 'y':
-        #TODO Guardar al jugador en la BBDD
-        #TODO Guardar al jugador en la partida actual
-        pass
+        # Insertar jugador en BBDD
+        insertBBDD_player(dni, name, not human, profile)
 
-    # Volver al menú anterior
-    addRemovePlayers()
+        # Asignar jugador a variable 'players'
+        player = newPlayer(dni, name, profile, human)
+        players[player[0]] = player[1]
+        
+        # Asignar jugador a partida actual
+        context_game['game'].append(dni)
+
+def insertBBDD_player(player_id, name, is_ai, risk_level):
+    '''Inserta un jugador en la BBDD.'''
+    try:
+        conn = pymysql.connect(
+            host='proyectosieteymedio.mysql.database.azure.com',
+            user='adminproyecto',
+            password='proyecto1234!',
+            database='siete_y_medio')
+        
+        cursor = conn.cursor()
+        consulta = """
+            INSERT INTO players (player_id, name, is_ai, risk_level)
+            VALUES (%s, %s, %s, %s);
+        """
+        cursor.execute(consulta, (player_id, name, is_ai, risk_level))
+
+        # Cerrar cursor y conexión
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+    except Exception as e:
+        print(f'Error al conectar con la BBDD en la función insertBBDD_player(): {e}')
+        _ = input('Enter to Continue')
+
+def loadBBDD_players():
+    '''Carga los jugadores de la BBDD en la variable 'players'.'''
 
 def showPlayersGame():
     '''Función que muestra los jugadores seleccionados cuando estamos añadiendo
@@ -496,7 +528,6 @@ def getGameID():
             user='adminproyecto',
             password='proyecto1234!',
             database='siete_y_medio')
-        print("Connection established")
 
         cursor = conn.cursor()
         consulta = "SELECT MAX(game_id) FROM games;"
@@ -519,6 +550,7 @@ def getGameID():
 
     except Exception as e:
         print(f'Error al conectar con la BBDD en la función getGameId(): {e}')
+        _ = input('Enter to Continue')
         return None
 
 def getBBDDRanking():
@@ -626,9 +658,6 @@ def playGame():
 
     # Mostrar el ganador:
     printWinner()
-
-    # Volver al menú principal de juego
-    '''TODO Al acabar la partida, devolver jugador al menú principal.'''
 
 def removeDefeatedPlayers():
     '''Elimina a los jugadores sin puntos de la partida.'''
