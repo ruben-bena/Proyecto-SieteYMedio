@@ -46,6 +46,7 @@ def mainMenu():
                 playGame()
             else:
                 print(initialString + 'Cannot start game yet! Need at least 2 players and one deck selected.')
+                _ = input(initialString + 'Enter to Continue')
         elif userInput == 4:
             ranking()
         elif userInput == 5:
