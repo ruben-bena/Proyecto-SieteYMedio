@@ -685,6 +685,7 @@ def playGame():
 
     # Insertar en BBDD los diccionarios creados para tal propósito:
     '''TODO Aquí van las funciones relacionadas con inserción de datos en BBDD.'''
+    insertBBDD_player_game_round(player_game_round)
 
     # Mostrar el ganador:
     printWinner()
@@ -1179,9 +1180,68 @@ player_game.
 Esta función debería llamarse justo después de acabar una partida'''
     pass
 
-def insertBBDD_player_game_round(player_game_round,cardgame_id):
+def insertBBDD_player_game_round(player_game_round):
     '''Función que guarda en la tabla player_game_round de la BBDD el diccionario
 player_game_round.
 Esta función debería llamarse justo después de acabar una partida.'''
-    pass
+    try:
+        conn = pymysql.connect(
+            host='proyectosieteymedio.mysql.database.azure.com',
+            user='adminproyecto',
+            password='proyecto1234!',
+            database='siete_y_medio')
+        
+        cursor = conn.cursor()
+
+        # Definir primer round_id a partir de los guardados en BBDD
+        consulta = "SELECT MAX(round_id) FROM rounds_players;"
+        cursor.execute(consulta)
+        resultado = cursor.fetchone()
+
+        max_id = resultado[0]  # Esto puede valer 'None' si no hay datos en la tabla de la BBDD
+        if max_id is None:
+            round_id = 1
+        else:
+            round_id = max_id + 1
+        
+        # Recorrer las rondas y jugadores para preparar las inserciones
+        for round_number, players in player_game_round.items():
+            for player_id, player_data in players.items():
+                # Preparar valores para inserción
+                is_bank = player_data['is_bank']
+                bet_points = player_data['bet_points']
+                starting_round_points = player_data['starting_round_points']
+                cards_value = player_data['cards_value']
+                ending_round_points = player_data['endind_round_points']
+
+                # Consulta SQL para insertar
+                consulta = """
+                    INSERT INTO rounds_players 
+                    (round_id, game_id, round_number, player_id, first_cart_in_hand, player_start_points, 
+                     player_end_points, player_bet, player_bank)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
+                """
+                valores = (
+                    round_id,
+                    context_game['id_game'],
+                    round_number,
+                    player_id,
+                    players[player_id]['initialCard'], 
+                    starting_round_points,
+                    ending_round_points,
+                    bet_points,
+                    is_bank
+                )
+
+                # Ejecutar la inserción
+                cursor.execute(consulta, valores)
+
+        # Cerrar cursor y conexión
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+    except Exception as e:
+        print(f'Error al conectar con la BBDD en la función insertBBDD_player_game_round(): {e}')
+        _ = input('Enter to Continue')
 # endregion playGame
