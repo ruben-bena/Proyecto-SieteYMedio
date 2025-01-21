@@ -666,6 +666,7 @@ def playGame():
                 humanRound(id, mazo)
             else:
                 standarRound(id, mazo)
+            fill_player_game_round(player_game_round, round=context_game['round'], playerID=id)  
             printStats(id)
 
         # Repartir puntos:
@@ -972,7 +973,6 @@ Y ejecuta la acción que elijamos'''
             standarRound(id, mazo)
             break
         elif userInput == 6:
-            fill_player_game_round(player_game_round, round=context_game['round'], playerID=id)
             break
     
 def orderCard(id, mazo):
