@@ -331,11 +331,11 @@ def setNewPlayer(human=True):
     validInputsProfile = [1,2,3]
     userInput = getOpt(strNewPlayer, inputOptProfile, validInputsProfile)
     if userInput == 1:
-        profile = 'Cautios'
+        profile = 50
     elif userInput == 2:
-        profile = 'Moderated'
+        profile = 40
     elif userInput == 3:
-        profile = 'Bold'
+        profile = 30
 
     # Confirmar jugador
     inputOptPlayerData = (
