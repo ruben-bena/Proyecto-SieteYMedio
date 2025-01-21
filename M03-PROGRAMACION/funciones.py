@@ -150,20 +150,24 @@ def logToFile(text):
 
 def newPlayer(dni, name, profile, human):
     '''Función que devuelve una tupla con dos elementos, el primero es el dni del nuevo
-jugador, el segundo, un diccionario con las claves: name, human, bank, initialCard,
-priority, type, bet, points, ards, roundPoints'''
+    jugador, el segundo, un diccionario con las claves: name, human, bank, initialCard,
+    priority, profile, bet, points, cards, roundPoints.'''
     # TODO Arreglar función. No sé qué valores por defecto debo darle a algunos campos.
-    player = (dni, {
+    player = (
+        dni,
+        {
         'name':name,
         'human': human,
         'bank': False,
         'initialCard': '',
-        'priority': '',
-        'type': profile,
-        'bet': '',
+        'priority': 0,
+        'profile': profile,
+        'bet': 0,
         'points': 20,
-        'ards': '',
-        'roundPoints': ''})
+        'cards': [],
+        'roundPoints': ''
+        }
+    )
     return player
 
 def addRemovePlayers():
