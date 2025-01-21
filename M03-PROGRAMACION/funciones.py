@@ -125,6 +125,7 @@ def chanceExceedingSevenAndHalf(id, mazo):
 
 def printPlayerStats(id):
     '''Esta función nos muestra los stats de un jugador humano.'''
+    clearScreen()
     print('~' * lineSize)
     print()
     print(strPlayerStats)
@@ -897,22 +898,23 @@ Y ejecuta la acción que elijamos'''
         '6) Stand')
     validInputsHumanRound = (1,2,3,4,5,6)
 
-    userInput = getOpt(strSevenAndHalf, inputOptHumanRounds, validInputsHumanRound, playerId=id)
+    while True:
+        userInput = getOpt(strSevenAndHalf, inputOptHumanRounds, validInputsHumanRound, playerId=id)
 
-    if userInput == 1:
-        printPlayerStats(id)
-    elif userInput == 2:
-        printStats(id, strSevenAndHalf)
-    elif userInput == 3:
-        setPlayerBet(id)
-        humanRound(id, mazo)
-    elif userInput == 4:
-        orderCard(id, mazo)
-        humanRound(id, mazo)
-    elif userInput == 5:
-        standarRound(id, mazo)
-    elif userInput == 6:
-        fill_player_game_round(player_game_round, round=context_game['round'], playerID=id)
+        if userInput == 1:
+            printPlayerStats(id)
+        elif userInput == 2:
+            printStats(id, strSevenAndHalf)
+        elif userInput == 3:
+            setPlayerBet(id)
+        elif userInput == 4:
+            orderCard(id, mazo)
+        elif userInput == 5:
+            standarRound(id, mazo)
+            break
+        elif userInput == 6:
+            fill_player_game_round(player_game_round, round=context_game['round'], playerID=id)
+            break
     
 def orderCard(id, mazo):
     '''Pide una carta al jugador.'''
@@ -1011,6 +1013,7 @@ def distributionPointAndNewBankCandidates():
 def printStats(idPlayer="", titulo=""):
     '''Imprime los stats de todos los jugadores de la partida.'''
     # TODO Implementar funcionalidad para que imprima 3 jugadores máximo por fila
+    clearScreen()
     if titulo == '':
         print('~' * lineSize)
     else:
