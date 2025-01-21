@@ -93,6 +93,7 @@ cardgame = {}
 cardgame = {
     'cardgame_id': id de partida,
     'players': Numero de jugadores,
+    'deck_id': 'ESP' o 'POKER', dependiendo de la baraja,
     'start_hour':Hora de inicio de artida ( datetime),
     'rounds': Número de rondas,
     'end_hour': hora final de partida ( datetime)
