@@ -684,7 +684,9 @@ def playGame():
         fill_player_game(player_game, playerID=id)
 
     # Insertar en BBDD los diccionarios creados para tal propósito:
-    '''TODO Aquí van las funciones relacionadas con inserción de datos en BBDD.'''
+    insertBBDDCardgame(cardgame)
+    '''No se ejecuta inserción de 'player_game' porque no se ha creado la tabla para ello en la BBDD.'''
+    #insertBBDD_player_game(player_game, context_game['id_game'])
     insertBBDD_player_game_round(player_game_round)
 
     # Mostrar el ganador:
@@ -1172,7 +1174,39 @@ def printWinner():
 def insertBBDDCardgame(cardgame):
     '''Función que guarda un nuevo registro en la tabla cardgame.
 Esta función debería llamarse justo después de acabar una partida.'''
-    pass
+    try:
+        conn = pymysql.connect(
+            host='proyectosieteymedio.mysql.database.azure.com',
+            user='adminproyecto',
+            password='proyecto1234!',
+            database='siete_y_medio')
+        
+        cursor = conn.cursor()
+
+        # Definir primer round_id a partir de los guardados en BBDD
+        consulta = """
+            INSERT INTO games 
+            (game_id, start_time, end_time, deck_id, number_players, number_rounds)
+            VALUES (%s, %s, %s, %s, %s, %s);
+        """
+        valores = (
+            cardgame['cardgame_id'], 
+            cardgame['start_hour'], 
+            cardgame['end_hour'], 
+            cardgame['deck_id'], 
+            cardgame['players'], 
+            cardgame['rounds']
+        )
+        cursor.execute(consulta, valores)    
+
+        # Cerrar cursor y conexión
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+    except Exception as e:
+        print(f'Error al conectar con la BBDD en la función insertBBDDCardgame(): {e}')
+        _ = input('Enter to Continue')
 
 def insertBBDD_player_game(player_game,cardgame_id):
     '''Función que guarda en la tabla player_game de la BBDD el diccionario
