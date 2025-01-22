@@ -8,7 +8,7 @@ playersPrueba = {
     '11111111A': {
         'name': 'pepe',
         'human': True,
-        'bank': '',
+        'bank': False,
         'initialCard': '',
         'priority': 0,
         'profile': 40,
@@ -20,7 +20,7 @@ playersPrueba = {
     '22222222B': {
         'name': 'luis',
         'human': True,
-        'bank': '',
+        'bank': False,
         'initialCard': '',
         'priority': 0,
         'profile': 30,
@@ -32,7 +32,7 @@ playersPrueba = {
     '33333333C': {
         'name': 'lola',
         'human': True,
-        'bank': '',
+        'bank': False,
         'initialCard': '',
         'priority': 0,
         'profile': 50,
@@ -44,7 +44,7 @@ playersPrueba = {
     '44444444D': {
         'name': 'bot1',
         'human': False,
-        'bank': '',
+        'bank': False,
         'initialCard': '',
         'priority': 0,
         'profile': 30,

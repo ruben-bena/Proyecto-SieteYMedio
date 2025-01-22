@@ -12,6 +12,23 @@ from datos import *
 from setPlayers import *
 #from playGame import *
 
+if PRUEBAS:
+    players = playersPrueba
+    for id in players:
+        context_game['game'].append(id)
+
+    print('Iniciando MODO PRUEBA')
+    print()
+    print('Los jugadores serán cargados desde la variable "playersPrueba" dentro del archivo "parametros.py".')
+    print('No se cargara ni insertará ningún dato en la BBDD.')
+    print()
+    print('Para iniciar el juego de forma normal:')
+    print('1) Ir a parametros.py y cambiar variable PRUEBAS=False')
+    print('2) Volver a ejecutar el archivo main.py')
+    input('Enter to Continue')
+else:
+    players = loadBBDD_players()
+
 #region funciones
 def clearScreen() -> None:
     '''Limpiamos la pantalla de la terminal.
@@ -83,7 +100,7 @@ def getOpt(textOpts="", inputOptText=[], rangeList=[], inputName='', errorName='
         print(textOpts.center(lineSize))
         print('')
         if round != '' and playerId != '':
-            print(f'Round {context_game['round']}, Turn of {players[playerId]['name']}'.center(lineSize, str='~'))
+            print(f'Round {context_game['round']}, Turn of {players[playerId]['name']}'.center(lineSize, '~'))
         else:
             print('~' * lineSize)
         print('')
@@ -118,7 +135,7 @@ def chanceExceedingSevenAndHalf(id, mazo):
     nCartasExceder = 0
     puntosActuales = getPlayerCardPoints(id)
     for idCarta in mazo:
-        puntosCarta = context_game[idCarta]['value']
+        puntosCarta = context_game['cards_deck'][idCarta]['value']
         pasamosSieteYMedio = (puntosActuales + puntosCarta) > 7.5
         if pasamosSieteYMedio:
             nCartasExceder += 1
@@ -138,7 +155,7 @@ def printPlayerStats(id):
     print()
     for nombreClave in players[id].keys():
         valorClave = str(players[id][nombreClave])
-        print(initialString + nombreClave.left(20) + valorClave)
+        print(initialString + nombreClave.ljust(20) + valorClave)
     print()
     _ = input(initialString + 'Enter to continue')
 
@@ -631,6 +648,8 @@ def playGame():
     for card_id in context_game['cards_deck'].keys():
         mazo.append(card_id)
 
+    context_game['round'] = 0
+
     # Establecer prioridades iniciales de los jugadores:
     setGamePriority(mazo)
 
@@ -672,7 +691,7 @@ def playGame():
             else:
                 standarRound(id, mazo)
             fill_player_game_round(player_game_round, round=context_game['round'], playerID=id)  
-            printStats(id)
+            printStats(idPlayer=id)
 
         # Repartir puntos:
         newBankCandidates = distributionPointAndNewBankCandidates()
@@ -682,6 +701,14 @@ def playGame():
 
         # Establecer nueva banca si es necesario:
         setNewBank(newBankCandidates)
+
+        printStats(titulo=True)
+
+        # Actualizar variables
+        context_game['round'] += 1
+        for id in context_game['game']:
+            players[id]['cards'] = []
+            players[id]['roundPoints'] = 0
 
     # Rellenar variables para BBDD
     fill_cardgame(cardgame)
@@ -762,7 +789,7 @@ def setGamePriority(mazo, giveInitialCard=True, setBank=True):
 
         # Repartir una carta a cada jugador para decidir prioridades
         for id in context_game['game']:
-            players[id]['initialCard'] = mazo.pop[0]
+            players[id]['initialCard'] = mazo.pop(0)
 
     # Ordenar lista jugadores en función de carta inicial usando método de la burbuja
     orderAllPlayers()
@@ -810,19 +837,25 @@ def generateBBDDvariables():
 
 def fill_cardgame(cardgame):
     '''Función para insertar datos en el diccionario cardgame'''
-    cardgame['rounds'] = context_game['rounds']
+    cardgame['rounds'] = context_game['round']
     cardgame['end_hour'] = datetime.datetime.now()
 
 def fill_player_game(player_game,playerID):
     '''Función para insertar datos en el diccionario player_game'''
     gameID = context_game['id_game']
-    player_game[gameID]['initial_card_id'] = players[playerID]['initialCard']
-    player_game[gameID]['starting_points'] = 20
-    player_game[gameID]['ending_points'] = players[id]['points']
+    if len(player_game) == 0:
+        player_game[gameID] = {}
+    player_game[gameID][playerID] = {}
+    player_game[gameID][playerID]['initial_card_id'] = players[playerID]['initialCard']
+    player_game[gameID][playerID]['starting_points'] = 20
+    player_game[gameID][playerID]['ending_points'] = players[id]['points']
     
 
 def fill_player_game_round(player_game_round,round,playerID):
     '''Función para insertar datos en el diccionario player_game_round'''
+    if round not in player_game_round.keys():
+        player_game_round[round] = {}
+    player_game_round[round][playerID] = {}
     player_game_round[round][playerID]['is_bank'] = players[playerID]['bank']
     player_game_round[round][playerID]['bet_points'] = players[playerID]['bet']
     if round == 0:
@@ -925,6 +958,7 @@ jugador que es y teniendo en cuenta si el jugador es banca o no.'''
 
     if playerIsBank:
         while True:
+            players[id]['roundPoints'] = getPlayerCardPoints(id)
             bankWonRound = checkBankWonRound(id) # Banca gana la ronda, sin necesitar más cartas
             if bankWonRound:
                 break
@@ -941,7 +975,7 @@ jugador que es y teniendo en cuenta si el jugador es banca o no.'''
             if (chanceExceeding > playerProfile and not bankOrdersCard) or bankCannotWin:
                 break
             else:
-                idCarta = mazo.pop[0]
+                idCarta = mazo.pop(0)
                 players[id]['cards'].append(idCarta)
 
     else:
@@ -950,8 +984,9 @@ jugador que es y teniendo en cuenta si el jugador es banca o no.'''
             if chanceExceeding > playerProfile:
                 break
             else:
-                idCarta = mazo.pop[0]
-                players[id]['cards'].append(idCarta)   
+                idCarta = mazo.pop(0)
+                players[id]['cards'].append(idCarta)
+                players[id]['roundPoints'] = getPlayerCardPoints(id)
 
 def setPlayerBet(id):
     '''Pide al jugador un valor de apuesta. Si el valor es válido, lo asigna.'''
@@ -964,7 +999,7 @@ def setPlayerBet(id):
         maxBet = min(20, players[id]['points'])
         for n in range(1, maxBet + 1):
             validInputsBet.append(n)
-        bet = getOpt(strSevenAndHalf, rangeList=validInputsBet, inputName='Set the new Bet', errorName='The New Bet has to be a number between 1 and  20')
+        bet = getOpt(strSevenAndHalf, rangeList=validInputsBet, inputName='Set the new Bet', errorName=f'The New Bet has to be a number between 1 and {maxBet}')
         players[id]['bet'] = bet
 
 def humanRound(id, mazo):
@@ -998,6 +1033,8 @@ Y ejecuta la acción que elijamos'''
             setPlayerBet(id)
         elif userInput == 4:
             orderCard(id, mazo)
+            if players[id]['roundPoints'] > 7.5:
+                break
         elif userInput == 5:
             standarRound(id, mazo)
             break
@@ -1015,21 +1052,24 @@ def orderCard(id, mazo):
     # Si jugador ya tiene cartas, preguntar si quiere pedir carta
     if not jugadorSinCartas:
         posibilidadDePasarse = chanceExceedingSevenAndHalf(id, mazo)
-        print(initialString + f'Chance of exceed 7,5 = {posibilidadDePasarse:.02} %')
+        print(initialString + f'Chance of exceed 7,5 = {posibilidadDePasarse:.2f} %')
         userInput = input(initialString + 'Do you want another card? Y/y = yes, any other key = Not')
         if userInput == 'Y' or userInput == 'y':
             jugadorQuiereCarta = True
 
     if jugadorQuiereCarta or jugadorSinCartas:
         # Sacar carta del mazo. Añadirla carta y puntos a jugador
-        idCarta = mazo.pop[0]
+        idCarta = mazo.pop(0)
         players[id]['cards'].append(idCarta)
 
         # Imprimir info por pantalla
-        nombreCarta = context_game['cards_deck']['literal']
+        nombreCarta = context_game['cards_deck'][idCarta]['literal']
         print(initialString + f'The new card is {nombreCarta}')
         playerCardPoints = getPlayerCardPoints(id)
+        players[id]['roundPoints'] = playerCardPoints
         print(initialString + f'Now you have {playerCardPoints} points')
+        if playerCardPoints > 7.5:
+            print(initialString + 'You passed from 7.5...No more options for you')
 
     _ = input(initialString + 'Enter to Continue')
 
@@ -1059,8 +1099,8 @@ def distributionPointAndNewBankCandidates():
 
             # Declarar variables para bucle condicional
             playerRoundPoints = players[player_id]['roundPoints']
-            bankWonToPlayer = (bankRoundPoints >= playerRoundPoints) and (bankRoundPoints <= 7.5)
-            playerWonToBank = (bankRoundPoints < playerRoundPoints) and (playerRoundPoints <= 7.5)
+            bankWonToPlayer = ((bankRoundPoints >= playerRoundPoints) and (bankRoundPoints <= 7.5)) or ((bankRoundPoints <= 7.5) and (playerRoundPoints > 7.5))
+            playerWonToBank = (bankRoundPoints < playerRoundPoints) and (playerRoundPoints <= 7.5) or ((playerRoundPoints <= 7.5) and (bankRoundPoints > 7.5))
             deltaPoints = 0 # Si no ha ganado ni banca ni jugador (ambos han pasado 7.5), se mantendrá este valor
             
             # Si jugador gana a banca
@@ -1069,6 +1109,8 @@ def distributionPointAndNewBankCandidates():
                     deltaPoints += players[player_id]['bet'] * 2
                 else:
                     deltaPoints += players[player_id]['bet']
+            if deltaPoints > players[bank_id]['points']:
+                deltaPoints = players[bank_id]['points']
 
             # Si banca gana a jugador
             elif bankWonToPlayer:
@@ -1097,11 +1139,11 @@ def distributionPointAndNewBankCandidates():
 
     return newBankCandidates
 
-def printStats(idPlayer="", titulo=""):
+def printStats(idPlayer="", titulo=False):
     '''Imprime los stats de todos los jugadores de la partida.'''
     # TODO Implementar funcionalidad para que imprima 3 jugadores máximo por fila
     clearScreen()
-    if titulo == '':
+    if not titulo:
         print('~' * lineSize)
     else:
         print(f' STATS AFTER ROUND {context_game['round'] }'.center(lineSize, '~'))
@@ -1113,7 +1155,7 @@ def printStats(idPlayer="", titulo=""):
         playerName = players[idPlayer]['name']
         print(f'Round {context_game['round']}, Turn of {playerName}'.center(lineSize, '~'))
     print()
-    for nombreClave in players[idPlayer]:
+    for nombreClave in playersKeysForID:
         line = ''
         line += nombreClave.ljust(20)
         for id in context_game['game']:
@@ -1136,9 +1178,9 @@ def orderAllPlayers():
     for pasada in range(len(context_game['game']) - 1):
         for i in range(len(context_game['game']) - pasada - 1):
             # Comprobar que el número de la carta es mayor
-            idJugadorActual = context_game[i]
+            idJugadorActual = context_game['game'][i]
             idCartaJugadorActual = players[idJugadorActual]['initialCard']
-            idJugadorSiguiente = context_game[i+1]
+            idJugadorSiguiente = context_game['game'][i+1]
             idCartaJugadorSiguiente = players[idJugadorSiguiente]['initialCard']
 
             seDebeOrdenar = False
@@ -1163,9 +1205,9 @@ def orderPlayersByPriority(listaJugadores=context_game):
     for pasada in range(len(context_game['game']) - 1):
         for i in range(len(context_game['game']) - pasada - 1):
             # Comprobar que el valor de prioridad es más pequeño
-            idCurrentPlayer = context_game[i]
+            idCurrentPlayer = context_game['game'][i]
             priorityCurrentPlayer = players[idCurrentPlayer]['priority']
-            idNextPlayer = context_game[i+1]
+            idNextPlayer = context_game['game'][i+1]
             priorityNextPlayer = players[idNextPlayer]['priority']
 
             isOrdered = False
@@ -1192,7 +1234,7 @@ def printWinner():
     id_winner = max(context_game['game'], key=lambda x:players[x]['points'])
     name_winner = players[id_winner]['name']
     points_winner = players[id_winner]['points']
-    print(initialString + f'The winner is {id_winner} - {name_winner}, in {context_game['round']}, with {points_winner} points!')
+    print(initialString + f'The winner is {id_winner} - {name_winner}, in {context_game['round']} rounds, with {points_winner} points!')
 
     _ = input(initialString + 'Enter to continue')
 

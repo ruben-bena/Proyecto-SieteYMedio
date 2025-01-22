@@ -21,6 +21,7 @@ Este diccionario nos servirá para todo lo relacionado con las cartas.
 '''
 
 players = {}
+playersKeysForID = ['name','human','bank','initialCard','priority','profile','bet','points','cards','roundPoints']
 '''
 players = {
     'id_jugador1': {
@@ -68,6 +69,12 @@ mazo = []
 '''id’s de las cartas que componen el mazo en cada momento.'''
 
 context_game = {}
+context_game['game'] = []
+context_game['round'] = 0
+context_game['id_game'] = 0
+context_game['maxRounds'] = 5
+context_game['cards_deck'] = {}
+
 '''Contiene una serie de variables de contexto a las que podamos acceder desde cualquier sitio:
 
 context_game['game'] = list (id de jugadores en la partida actual).
