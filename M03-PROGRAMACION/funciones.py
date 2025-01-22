@@ -360,7 +360,7 @@ def insertBBDD_player(player_id, name, is_ai, risk_level):
     '''Inserta un jugador en la BBDD.'''
     try:
         conn = pymysql.connect(
-            host='proyectosieteymedio.mysql.database.azure.com',
+            host='proyectosetimitge.mysql.database.azure.com',
             user='adminproyecto',
             password='proyecto1234!',
             database='siete_y_medio')
@@ -385,7 +385,7 @@ def loadBBDD_players():
     '''Carga los jugadores de la BBDD en la variable 'players'.'''
     try:
         conn = pymysql.connect(
-            host='proyectosieteymedio.mysql.database.azure.com',
+            host='proyectosetimitge.mysql.database.azure.com',
             user='adminproyecto',
             password='proyecto1234!',
             database='siete_y_medio')
@@ -464,7 +464,7 @@ def returnListRanking(field='earnings'):
 def BBDDconnect():
     '''Función que conecta con la base de datos para insertar, borrar y modificar valores.'''
     conn = pymysql.connect(
-        host='proyectosieteymedio.mysql.database.azure.com',
+        host='proyectosetimitge.mysql.database.azure.com',
         user='adminproyecto',
         password='proyecto1234!',
         database='siete_y_medio')
@@ -751,7 +751,7 @@ def getGameID():
     '''Función que devuelve un id no existente en la tabla cardgame.'''
     try:
         conn = pymysql.connect(
-            host='proyectosieteymedio.mysql.database.azure.com',
+            host='proyectosetimitge.mysql.database.azure.com',
             user='adminproyecto',
             password='proyecto1234!',
             database='siete_y_medio')
@@ -1422,7 +1422,7 @@ def insertBBDDCardgame(cardgame):
 Esta función debería llamarse justo después de acabar una partida.'''
     try:
         conn = pymysql.connect(
-            host='proyectosieteymedio.mysql.database.azure.com',
+            host='proyectosetimitge.mysql.database.azure.com',
             user='adminproyecto',
             password='proyecto1234!',
             database='siete_y_medio')
@@ -1466,7 +1466,7 @@ player_game_round.
 Esta función debería llamarse justo después de acabar una partida.'''
     try:
         conn = pymysql.connect(
-            host='proyectosieteymedio.mysql.database.azure.com',
+            host='proyectosetimitge.mysql.database.azure.com',
             user='adminproyecto',
             password='proyecto1234!',
             database='siete_y_medio')
