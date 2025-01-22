@@ -12,23 +12,6 @@ from datos import *
 from setPlayers import *
 #from playGame import *
 
-if PRUEBAS:
-    players = playersPrueba
-    for id in players:
-        context_game['game'].append(id)
-
-    print('Iniciando MODO PRUEBA')
-    print()
-    print('Los jugadores serán cargados desde la variable "playersPrueba" dentro del archivo "parametros.py".')
-    print('No se cargara ni insertará ningún dato en la BBDD.')
-    print()
-    print('Para iniciar el juego de forma normal:')
-    print('1) Ir a parametros.py y cambiar variable PRUEBAS=False')
-    print('2) Volver a ejecutar el archivo main.py')
-    input('Enter to Continue')
-else:
-    players = loadBBDD_players()
-
 #region funciones
 def clearScreen() -> None:
     '''Limpiamos la pantalla de la terminal.
@@ -286,7 +269,7 @@ def newRandomDNI():
 def validName(name):
     '''Retorna True si un nombre de jugador es válido.
     Un nombre es válido si sólo contiene letras (1 mínimo) y números, y no es un string vacío.'''
-    if name is '':
+    if name == '':
         return False
     elif type(name) == int:
         return False
@@ -1348,4 +1331,22 @@ Esta función debería llamarse justo después de acabar una partida.'''
     except Exception as e:
         print(f'Error al conectar con la BBDD en la función insertBBDD_player_game_round(): {e}')
         _ = input('Enter to Continue')
+
+if PRUEBAS:
+    players = playersPrueba
+    for id in players:
+        context_game['game'].append(id)
+
+    print('Iniciando MODO PRUEBA')
+    print()
+    print('Los jugadores serán cargados desde la variable "playersPrueba" dentro del archivo "parametros.py".')
+    print('No se cargara ni insertará ningún dato en la BBDD.')
+    print()
+    print('Para iniciar el juego de forma normal:')
+    print('1) Ir a parametros.py y cambiar variable PRUEBAS=False')
+    print('2) Volver a ejecutar el archivo main.py')
+    input('Enter to Continue')
+else:
+    players = loadBBDD_players()
+
 # endregion playGame

@@ -1,7 +1,7 @@
 lineSize = 140
 lineStart = lineSize // 2 - 10
 initialString = ' ' * lineStart
-PRUEBAS = True
+PRUEBAS = False
 
 # Variables para pruebas:
 playersPrueba = {
