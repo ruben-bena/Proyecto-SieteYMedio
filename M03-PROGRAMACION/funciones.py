@@ -657,7 +657,10 @@ def playGame():
     resetPoints(players)
 
     # Crear un id de partida
-    game_id = getGameID()
+    if PRUEBAS:
+        game_id = 1
+    else:
+        game_id = getGameID()
     context_game['id_game'] = game_id
 
     # Crear diccionarios cardgame,player_game,player_game_round:
