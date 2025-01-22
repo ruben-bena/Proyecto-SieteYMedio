@@ -475,7 +475,10 @@ def savePlayer(nif,name,risk,human):
 
 def delBBDDPlayer(nif):
     '''Función que elimina un jugador de la BBDD'''
-    pass
+    cursor=BBDDconnect()
+    cursor.execute(f"SET FOREIGN_KEY_CHECKS = 0;")
+    cursor.execute(f"delete from players where player_id like {nif}")
+    print("Eliminado jugador/a "+ str(nif))
 
 def getGameId():
     '''Función que devuelve un id no existente en la tabla cardgame.'''
