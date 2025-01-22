@@ -718,14 +718,31 @@ def getHighestPriorityID(playerList):
     return highestPriorityID
 
 def setNewBank(newBankCandidates):
-    '''Realiza el cambio de banca al jugador con mayor prioridad.'''
-    # Quitar anterior banca
+    '''Evalúa si es necesario realizar un cambio de banca a partir de una lista de candidatos.'''
     bank_id = getBankId()
-    players[bank_id]['bank'] = False
+    # Variables de control
+    gameHasBank = (bank_id is not None)
+    thereAreCandidates = (len(newBankCandidates) != 0)
+    needNewBank = False
+    if gameHasBank:
+        # Si hay candidatos, asignar nueva banca
+        if thereAreCandidates:
+            needNewBank = True
+            # Borrar anterior banca
+            players[bank_id]['bank'] = False
+        # Si ya hay banca y no hay candidatos, no hacer nada
+        else:
+            pass
+    else:
+        needNewBank = True
 
-    # Asignar nueva banca (candidato con mayor prioridad)
-    new_bank_id = getHighestPriorityID(playerList=newBankCandidates)
-    players[new_bank_id]['bank'] = True
+    if needNewBank:
+        # Si no hay candidatos, mirar todos los jugadores
+        if thereAreCandidates:
+            newBankID = getHighestPriorityID(playerList=newBankCandidates)
+        else:
+            newBankID = getHighestPriorityID(playerList=context_game['game'])
+        players[newBankID]['bank'] = True
 
 def setGamePriority(mazo, giveInitialCard=True, setBank=True):
     '''Esta función establece las prioridades de los jugadores.
@@ -1022,9 +1039,8 @@ def getBankId():
     for player_id in context_game['game']:
         playerIsBank = players[player_id]['bank']
         if playerIsBank:
-            bank_id = player_id
-            break
-    return bank_id
+            return player_id
+    return None
 
 def distributionPointAndNewBankCandidates():
     '''Función que realiza el reparto de puntos una vez finalizada una ronda y devuelve
