@@ -424,6 +424,7 @@ def setPlayersGame():
     ya_seleccionados(players, context_game['game'])
     clearScreen()
     print_jugadores(players)
+    menu_principal(players, context_game['game'])
 
 def removeBBDDPlayer():
     '''Función que nos muestra los jugadores disponibles en BBDD, y elimina el que

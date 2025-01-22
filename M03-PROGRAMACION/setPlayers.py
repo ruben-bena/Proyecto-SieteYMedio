@@ -107,23 +107,24 @@ input("Enter Para Continuar")'''
 
 def agregar_jugador(seleccionados, player, key):
     if key in player and key not in seleccionados:
-        seleccionados[key] = player[key]
+        seleccionados.append(key)
         print("Jugador", player[key]['name']," agregado a seleccionados.\nJugador ID:",key)
-        print(ya_seleccionados(seleccionados))
+        ya_seleccionados(seleccionados)
         input("Enter Para Continuar")
     else:
         print("Error: Jugador con ID", key,"no existe")
 
-def eliminar_jugador(seleccionados, key):
+def eliminar_jugador(seleccionados, player, key):
     if key in seleccionados:
         eliminado = seleccionados.pop(key)
-        print("Jugador", eliminado['name'], "eliminado de seleccionados.")
-        print(ya_seleccionados(seleccionados))
+        nombreJugadorEliminado = player[eliminado]['name']
+        print("Jugador", nombreJugadorEliminado, "eliminado de seleccionados.")
+        ya_seleccionados(seleccionados)
         input("Enter Para Continuar")
     else:
         print("Error: Jugador con ID" ,key ,"no está en 'seleccionados'.")
 
-def menu_principal():
+def menu_principal(player, seleccionados):
     while True:
         menu = "- Escribe el ID del jugador para agregarlo." + "\n- Escribe '-ID' para eliminar un jugador. " + ("\n- Escribe '-1' para salir.")
         print(menu)
@@ -131,7 +132,7 @@ def menu_principal():
         opcion = input("Tu elección: ")
 
         if opcion == "-1":
-            print("Menú Principal")
+            '''print("Menú Principal")'''
             break
         elif opcion.startswith("-"):
             key = opcion[1:]
