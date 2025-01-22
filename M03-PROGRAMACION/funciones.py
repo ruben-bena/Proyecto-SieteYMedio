@@ -689,10 +689,11 @@ def playGame():
         fill_player_game(player_game, playerID=id)
 
     # Insertar en BBDD los diccionarios creados para tal propósito:
-    insertBBDDCardgame(cardgame)
-    '''No se ejecuta inserción de 'player_game' porque no se ha creado la tabla para ello en la BBDD.'''
-    #insertBBDD_player_game(player_game, context_game['id_game'])
-    insertBBDD_player_game_round(player_game_round)
+    if not PRUEBAS:
+        insertBBDDCardgame(cardgame)
+        '''No se ejecuta inserción de 'player_game' porque no se ha creado la tabla para ello en la BBDD.'''
+        #insertBBDD_player_game(player_game, context_game['id_game'])
+        insertBBDD_player_game_round(player_game_round)
 
     # Mostrar el ganador:
     printWinner()

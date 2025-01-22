@@ -1,9 +1,10 @@
 lineSize = 140
 lineStart = lineSize // 2 - 10
 initialString = ' ' * lineStart
+PRUEBAS = True
 
 # Variables para pruebas:
-players = {
+playersPrueba = {
     '11111111A': {
         'name': 'pepe',
         'human': True,
@@ -29,8 +30,8 @@ players = {
         'roundPoints': 0
     },
     '33333333C': {
-        'name': 'bot1',
-        'human': False,
+        'name': 'lola',
+        'human': True,
         'bank': '',
         'initialCard': '',
         'priority': 0,
@@ -41,7 +42,7 @@ players = {
         'roundPoints': 0
     },
     '44444444D': {
-        'name': 'bot2',
+        'name': 'bot1',
         'human': False,
         'bank': '',
         'initialCard': '',
