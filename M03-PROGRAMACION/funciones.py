@@ -9,6 +9,7 @@ import pymysql
 
 from parametros import *
 from datos import *
+from setPlayers import *
 #from playGame import *
 
 #region funciones
