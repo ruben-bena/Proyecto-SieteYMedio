@@ -422,6 +422,8 @@ def setPlayersGame():
     '''Función para establecer los jugadores que conformarán la partida siguiente'''
     clearScreen()
     ya_seleccionados(players, context_game['game'])
+    clearScreen()
+    print_jugadores(players)
 
 def removeBBDDPlayer():
     '''Función que nos muestra los jugadores disponibles en BBDD, y elimina el que

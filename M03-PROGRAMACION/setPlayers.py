@@ -96,8 +96,8 @@ def print_jugadores(player):
         bot_id, bot_info = bots[i]
         human_id, human_info = humans[i]
 
-        bot_line = bot_id.ljust(20) + bot_info['name'].center(20) + str(bot_info['type']).rjust(20)
-        human_line = human_id.ljust(20) + human_info["name"].center(20) + str(human_info['type']).rjust(20)
+        bot_line = bot_id.ljust(20) + bot_info['name'].center(20) + str(bot_info['profile']).rjust(20)
+        human_line = human_id.ljust(20) + human_info["name"].center(20) + str(human_info['profile']).rjust(20)
 
         print(bot_line + "||".center(20) + human_line)
         i += 1
