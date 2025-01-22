@@ -420,7 +420,8 @@ jugadores a la partida. (Hay una foto en el PDF que muestra cómo debería queda
 
 def setPlayersGame():
     '''Función para establecer los jugadores que conformarán la partida siguiente'''
-    pass
+    clearScreen()
+    ya_seleccionados(players, context_game['game'])
 
 def removeBBDDPlayer():
     '''Función que nos muestra los jugadores disponibles en BBDD, y elimina el que

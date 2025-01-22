@@ -45,16 +45,23 @@ seleccionados = {
                   "bet": 4, "points": 0, "cards": [], "roundsPoints": 0},
 }'''
 
-def ya_seleccionados(seleccionados):
+def ya_seleccionados(players, seleccionados):
     cabecera2 = "Jugadores Dentro Del Juego".center(60, "=") + "\n"
     datos = ""
-    for key, jugador in seleccionados.items():
-        datos += (jugador["name"].ljust(20) + str(jugador["human"]).center(20)+ str(jugador["type"]).rjust(20) + "\n")
+    '''for key, jugador in seleccionados.items():
+        datos += (jugador["name"].ljust(20) + str(jugador["human"]).center(20)+ str(jugador["type"]).rjust(20) + "\n")'''
+    for player_id in seleccionados:
+        name = players[player_id]['name']
+        human = str(players[player_id]['human'])
+        type = str(players[player_id]['profile'])
+        datos += (name.ljust(20) + human.center(20)+ type.rjust(20) + "\n")
 
     total = cabecera2 + datos
-    return total
-print(ya_seleccionados(seleccionados))
-input("Enter Para Continuar")
+    print(total)
+    input("Enter Para Continuar")
+    '''return total'''
+'''print(ya_seleccionados(seleccionados))
+input("Enter Para Continuar")'''
 
 def print_jugadores(player):
     cabecera = (((" SELECT PLAYER ".center(140, "=") + "\n" + "Bot Players".center(60) + "||".center(20)
